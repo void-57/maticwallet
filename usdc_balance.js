@@ -17,7 +17,7 @@ async function checkUSDCBalance(ethAddress) {
   }
 }
 
-checkUSDCBalance("0xce54a332ee4324719daa8208e01f37249b2d664a");
+checkUSDCBalance("0x5554ce73657b676739da605f3bc7c56dcbeb681c");
 
 
 async function checkUSDTBalance(ethAddress) {
@@ -38,4 +38,4 @@ async function checkUSDTBalance(ethAddress) {
   }
 }
 
-checkUSDTBalance("0xce54a332ee4324719daa8208e01f37249b2d664a");
+checkUSDTBalance("0x5554ce73657b676739da605f3bc7c56dcbeb681c");
