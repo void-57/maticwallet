@@ -1,27 +1,13 @@
-let isMetamaskConnected = false;
 function connectToMetaMask() {
   if (typeof window.ethereum === "undefined")
-    return console.log("Please install MetaMask.");
+    return 'Please install MetaMask'
   return ethereum
     .request({ method: 'eth_requestAccounts' })
-    .then(() => {
-      console.log('MetaMask connected');
-      isMetamaskConnected = true;
-    })
-    .catch((error) => {
-      if (error.code === 4001) {
-        // EIP-1193 userRejectedRequest error
-        console.log('Please connect to MetaMask.');
-      } else {
-        console.error(error);
-      }
-      isMetamaskConnected = false;
-    });
 }
 // connectToMetaMask();
 async function checkUSDCBalance(ethAddress) {
   try {
-    if (!isMetamaskConnected) {
+    if (!window.ethereum.isConnected()) {
       await connectToMetaMask();
     }
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -37,7 +23,7 @@ async function checkUSDCBalance(ethAddress) {
 
 async function checkUSDTBalance(ethAddress) {
   try {
-    if (!isMetamaskConnected) {
+    if (!window.ethereum.isConnected()) {
       await connectToMetaMask();
     }
     const provider = new ethers.providers.Web3Provider(window.ethereum);

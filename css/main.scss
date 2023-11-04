@@ -663,7 +663,8 @@ menu {
 }
 #main_header {
   display: grid;
-  grid-template-columns: 1fr auto;
+  align-items: center;
+  grid-template-columns: 1fr auto auto;
   gap: 1rem;
   padding: 1rem;
 }
@@ -685,6 +686,39 @@ menu {
     font-size: 0.8rem;
     font-weight: 500;
     color: rgba(var(--text-color), 0.8);
+  }
+}
+#meta_mask_status_button {
+  gap: 0.3rem;
+  border-radius: 2rem;
+  background-color: rgba(var(--text-color), 0.06);
+  padding: 0.3rem 0.6rem;
+  font-weight: 500;
+  &:read-only {
+    cursor: initial;
+  }
+  .icon-wrapper {
+    position: relative;
+    display: grid;
+    place-content: center;
+    &::after {
+      content: "";
+      position: absolute;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      top: 0;
+      right: 0;
+    }
+    & > * {
+      grid-area: 1/1;
+    }
+  }
+  &[data-status="connected"] .icon-wrapper::after {
+    background-color: var(--green);
+  }
+  &[data-status="disconnected"] .icon-wrapper::after {
+    background-color: var(--danger-color);
   }
 }
 theme-toggle {
