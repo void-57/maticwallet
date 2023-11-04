@@ -752,12 +752,6 @@ menu {
   padding: 0.3rem 0.6rem;
   font-weight: 500;
 }
-#meta_mask_status_button:-moz-read-only {
-  cursor: initial;
-}
-#meta_mask_status_button:read-only {
-  cursor: initial;
-}
 #meta_mask_status_button .icon-wrapper {
   position: relative;
   display: grid;
@@ -774,6 +768,9 @@ menu {
 }
 #meta_mask_status_button .icon-wrapper > * {
   grid-area: 1/1;
+}
+#meta_mask_status_button[data-status=connected] {
+  pointer-events: none;
 }
 #meta_mask_status_button[data-status=connected] .icon-wrapper::after {
   background-color: var(--green);

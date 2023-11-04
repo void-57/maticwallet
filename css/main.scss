@@ -694,9 +694,6 @@ menu {
   background-color: rgba(var(--text-color), 0.06);
   padding: 0.3rem 0.6rem;
   font-weight: 500;
-  &:read-only {
-    cursor: initial;
-  }
   .icon-wrapper {
     position: relative;
     display: grid;
@@ -714,8 +711,11 @@ menu {
       grid-area: 1/1;
     }
   }
-  &[data-status="connected"] .icon-wrapper::after {
-    background-color: var(--green);
+  &[data-status="connected"] {
+    pointer-events: none;
+    .icon-wrapper::after {
+      background-color: var(--green);
+    }
   }
   &[data-status="disconnected"] .icon-wrapper::after {
     background-color: var(--danger-color);

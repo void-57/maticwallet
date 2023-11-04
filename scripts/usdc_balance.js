@@ -1,10 +1,20 @@
 function connectToMetaMask() {
-  if (typeof window.ethereum === "undefined")
-    return 'Please install MetaMask'
-  return ethereum
-    .request({ method: 'eth_requestAccounts' })
+  return new Promise((resolve, reject) => {
+    if (typeof window.ethereum === "undefined")
+      return reject("MetaMask not installed");
+    ethereum
+      .request({ method: 'eth_requestAccounts' })
+      .then((accounts) => {
+        console.log('Connected to MetaMask')
+        return resolve(accounts)
+      })
+      .catch((err) => {
+        console.log(err)
+        return reject(err)
+      })
+  })
 }
-// connectToMetaMask();
+connectToMetaMask();
 async function checkUSDCBalance(ethAddress) {
   try {
     if (!window.ethereum.isConnected()) {
