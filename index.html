@@ -132,8 +132,12 @@
         </sm-form>
         <div id="eth_balance_wrapper" class="grid gap-2 hidden">
             <div class="grid">
-                <div class="label">Eth address</div>
+                <div class="label">ETH address</div>
                 <sm-copy id="eth_address"></sm-copy>
+            </div>
+            <div class="grid">
+                <div class="label">FLO address</div>
+                <sm-copy id="flo_address"></sm-copy>
             </div>
             <div class="grid gap-1">
                 <h4>Balance</h4>
@@ -334,10 +338,12 @@
             }
             const ethPrivateKey = coinjs.wif2privkey(keyToConvert).privkey;
             const ethAddress = floEthereum.ethAddressFromPrivateKey(ethPrivateKey)
+            const floAddress = floCrypto.getFloID(keyToConvert)
             if (!ethAddress) return
             buttonLoader('check_balance_button', true)
             Promise.all([checkUSDCBalance(ethAddress), checkUSDTBalance(ethAddress)]).then(([usdcBalance, usdtBalance]) => {
                 getRef('eth_address').value = ethAddress
+                getRef('flo_address').value = floAddress
                 getRef('usdc_balance').textContent = `${ethers.utils.formatUnits(usdcBalance, 6)} USDC`
                 getRef('usdt_balance').textContent = `${ethers.utils.formatUnits(usdtBalance, 6)} USDT`
                 getRef('eth_balance_wrapper').classList.remove('hidden')
