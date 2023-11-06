@@ -315,7 +315,10 @@
                     // EIP-1193 userRejectedRequest error
                     notify('Please connect to MetaMask to continue', 'error')
                 } else {
-                    console.error(error);
+                    if (error === 'MetaMask not installed')
+                        notify('Please install MetaMask to continue', 'error')
+                    else
+                        notify(error, 'error')
                 }
             })
             if (typeof window.ethereum !== 'undefined') {
