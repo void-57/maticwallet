@@ -800,14 +800,12 @@ main {
 }
 
 #main_section {
+  align-content: center;
   padding: 1.5rem;
 }
 #main_section > * {
   max-width: 36rem;
   margin: 0 auto;
-}
-#main_section h2 {
-  margin-top: 10vw;
 }
 
 #input_wrapper {
