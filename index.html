@@ -405,6 +405,7 @@
             if (!ethAddress) return
             buttonLoader('check_balance_button', true)
             Promise.all([checkUSDCBalance(ethAddress), checkUSDTBalance(ethAddress)]).then(([usdcBalance, usdtBalance]) => {
+                console.log(usdcBalance, usdtBalance)
                 getRef('eth_address').value = ethAddress
                 getRef('flo_address').value = floAddress
                 getRef('usdc_balance').textContent = `${ethers.utils.formatUnits(usdcBalance, 6)} USDC`
