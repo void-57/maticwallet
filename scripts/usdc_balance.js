@@ -2,6 +2,7 @@ function connectToMetaMask() {
   return new Promise((resolve, reject) => {
     if (typeof window.ethereum === "undefined")
       return reject("MetaMask not installed");
+    return resolve(true)
     ethereum
       .request({ method: 'eth_requestAccounts' })
       .then((accounts) => {

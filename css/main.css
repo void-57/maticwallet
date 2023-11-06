@@ -711,11 +711,6 @@ menu {
   list-style: none;
 }
 
-.page {
-  display: flex;
-  flex-direction: column;
-}
-
 #main_header {
   display: grid;
   align-items: center;
@@ -801,14 +796,17 @@ theme-toggle {
 
 main {
   display: grid;
-  gap: 2rem;
+  min-height: calc(100% - 5rem);
+}
+
+#main_section {
   padding: 1.5rem;
 }
-main > * {
+#main_section > * {
   max-width: 36rem;
   margin: 0 auto;
 }
-main h2 {
+#main_section h2 {
   margin-top: 10vw;
 }
 
@@ -826,6 +824,23 @@ main h2 {
 #eth_balance_wrapper li:not(:last-of-type) {
   border-bottom: solid thin rgba(var(--text-color), 0.3);
   padding-bottom: 0.5rem;
+}
+
+#error_section {
+  display: grid;
+  height: 100%;
+  gap: 0.5rem;
+  place-content: center;
+  place-items: center;
+  text-align: center;
+}
+#error_section .icon {
+  height: 8rem;
+  width: 8rem;
+  padding: 2rem;
+  background-color: rgba(var(--text-color), 0.06);
+  border-radius: 5rem;
+  margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 640px) {
