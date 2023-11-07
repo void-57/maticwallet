@@ -364,9 +364,29 @@
                 }
             });
             connectToMetaMask().then(() => {
-                setMetaMaskStatus(window.ethereum.isConnected())
-                getRef('main_section').classList.remove('hidden')
-                getRef('error_section').classList.add('hidden')
+                // setMetaMaskStatus(window.ethereum.isConnected())
+                window.ethereum.on('networkChanged', (networkId) => {
+                    if (networkId !== '1') {
+                        getRef('error__title').textContent = 'Please switch MetaMask to Ethereum Mainnet'
+                        getRef('main_section').classList.add('hidden')
+                        getRef('error_section').classList.remove('hidden')
+                    } else {
+                        getRef('main_section').classList.remove('hidden')
+                        getRef('error_section').classList.add('hidden')
+                    }
+                })
+                window.ethereum.request({
+                    "method": "eth_chainId"
+                }).then(chainId => {
+                    if (chainId !== '0x1') {
+                        getRef('error__title').textContent = 'Please switch MetaMask to Ethereum Mainnet'
+                        getRef('main_section').classList.add('hidden')
+                        getRef('error_section').classList.remove('hidden')
+                    } else {
+                        getRef('main_section').classList.remove('hidden')
+                        getRef('error_section').classList.add('hidden')
+                    }
+                })
             }).catch((error) => {
                 setMetaMaskStatus(false)
                 if (error.code === 4001) {
