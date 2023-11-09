@@ -198,9 +198,15 @@ button:disabled {
 }
 
 .icon-only {
-  padding: 0.5rem;
+  height: 100%;
+  padding: 0;
+  padding: 0.4rem;
   border-radius: 0.3rem;
   aspect-ratio: 1/1;
+}
+.icon-only .icon {
+  height: 1em;
+  width: 1em;
 }
 
 a:-webkit-any-link:focus-visible {
@@ -712,11 +718,14 @@ menu {
 }
 
 #main_header {
+  grid-area: header;
   display: grid;
   align-items: center;
   grid-template-columns: 1fr auto;
   gap: 1rem;
   padding: 1rem;
+  border-bottom: solid thin rgba(var(--text-color), 0.3);
+  grid-column: 1/-1;
 }
 
 #logo {
@@ -796,11 +805,53 @@ theme-toggle {
 
 main {
   display: grid;
-  min-height: calc(100% - 5rem);
+  height: 100%;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "header" "main" "search-history";
+}
+
+aside {
+  grid-area: search-history;
+  view-transition-name: search-history;
+  padding-bottom: 1.5rem;
+}
+aside > * {
+  padding: 0 1rem;
+}
+aside h4 {
+  padding: 1rem;
+}
+
+.contact {
+  display: grid;
+  gap: 0.5rem;
+  align-items: center;
+  border: solid thin rgba(var(--text-color), 0.3);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.contact sm-chips {
+  background-color: rgba(var(--text-color), 0.06);
+  padding: 0.2rem 0.3rem;
+  border-radius: 0.5rem;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.contact sm-chip {
+  --padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  --border-radius: 0.3rem;
+}
+.contact sm-copy {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 #main_section {
-  align-content: center;
+  grid-area: main;
+  margin-top: 3vw;
+  align-content: start;
   padding: 1.5rem;
 }
 #main_section > * {
@@ -852,6 +903,22 @@ main {
   }
   .popup__header {
     padding: 1rem 1.5rem 0 1.5rem;
+  }
+  main {
+    grid-template-columns: 22rem 1fr;
+    grid-template-areas: "header header" "search-history main";
+    grid-template-rows: auto 1fr;
+  }
+  aside {
+    border-right: solid thin rgba(var(--text-color), 0.3);
+    overflow-y: auto;
+  }
+  aside h4 {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: rgba(var(--foreground-color), 1);
+    z-index: 1;
   }
   #input_wrapper {
     grid-template-columns: 1fr auto;
