@@ -882,6 +882,7 @@ aside h4 {
   place-content: center;
   place-items: center;
   text-align: center;
+  grid-column: 1/-1;
 }
 #error_section .icon {
   height: 8rem;

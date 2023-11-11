@@ -92,7 +92,7 @@
             </button>
             <theme-toggle></theme-toggle>
         </header>
-        <aside class="flex flex-direction-column">
+        <aside id="saved_addresses_wrapper" class="flex flex-direction-column">
             <h4>
                 Searched addresses
             </h4>
@@ -234,7 +234,7 @@
     <script src="scripts/floEthereum.js" type="text/javascript"></script>
     <script src="scripts/compactIDB.js" type="text/javascript"></script>
     <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"> </script>
-    <script src="scripts/usdc_balance.js" type="text/javascript"> </script>
+    <script src="scripts/ethOperator.js" type="text/javascript"> </script>
     <script>
         const uiGlobals = {}
         const { html, svg, render: renderElem } = uhtml;
@@ -465,15 +465,20 @@
             }).catch((error) => {
                 console.error(error)
             })
-            connectToMetaMask().then(() => {
+            // connectToMetaMask().then(() => {
+            console.log('MetaMask connected')
+            if (window.ethereum) {
                 // setMetaMaskStatus(window.ethereum.isConnected())
-                window.ethereum.on('chainChanged', (networkId) => {
-                    if (networkId !== '1') {
+                window.ethereum.on('chainChanged', (chainId) => {
+                    console.log(chainId)
+                    if (chainId !== '0x1') {
                         getRef('error__title').textContent = 'Please switch MetaMask to Ethereum Mainnet'
                         getRef('main_section').classList.add('hidden')
+                        getRef('saved_addresses_wrapper').classList.add('hidden')
                         getRef('error_section').classList.remove('hidden')
                     } else {
                         getRef('main_section').classList.remove('hidden')
+                        getRef('saved_addresses_wrapper').classList.remove('hidden')
                         getRef('error_section').classList.add('hidden')
                     }
                 })
@@ -483,26 +488,29 @@
                     if (chainId !== '0x1') {
                         getRef('error__title').textContent = 'Please switch MetaMask to Ethereum Mainnet'
                         getRef('main_section').classList.add('hidden')
+                        getRef('saved_addresses_wrapper').classList.add('hidden')
                         getRef('error_section').classList.remove('hidden')
                     } else {
                         getRef('main_section').classList.remove('hidden')
+                        getRef('saved_addresses_wrapper').classList.remove('hidden')
                         getRef('error_section').classList.add('hidden')
                     }
                 })
-            }).catch((error) => {
-                setMetaMaskStatus(false)
-                if (error.code === 4001) {
-                    // EIP-1193 userRejectedRequest error
-                    notify('Please connect to MetaMask to continue', 'error')
-                } else {
-                    if (error === 'MetaMask not installed') {
-                        getRef('main_section').classList.add('hidden')
-                        getRef('error_section').classList.remove('hidden')
-                    }
-                    else
-                        console.error(error)
-                }
-            })
+            }
+            // }).catch((error) => {
+            //     setMetaMaskStatus(false)
+            //     if (error.code === 4001) {
+            //         // EIP-1193 userRejectedRequest error
+            //         notify('Please connect to MetaMask to continue', 'error')
+            //     } else {
+            //         if (error === 'MetaMask not installed') {
+            //             getRef('main_section').classList.add('hidden')
+            //             getRef('error_section').classList.remove('hidden')
+            //         }
+            //         else
+            //             console.error(error)
+            //     }
+            // })
             if (typeof window.ethereum !== 'undefined') {
                 ethereum.on('accountsChanged', (accounts) => {
                     getRef('eth_balance_wrapper').classList.add('hidden')
@@ -559,41 +567,45 @@
             }
             if (!ethAddress) return
             buttonLoader('check_balance_button', true)
-            Promise.all([checkUSDCBalance(ethAddress), checkUSDTBalance(ethAddress)]).then(([usdcBalance, usdtBalance]) => {
-                compactIDB.readData('contacts', floAddress).then(result => {
-                    if (result) return
-                    compactIDB.addData('contacts', {
-                        ethAddress,
-                    }, floAddress).then(() => {
-                        renderSearchedAddressList()
-                    }).catch((error) => {
-                        console.error(error)
+            Promise.all([
+                ethOperator.checkTokenBalance({ address: ethAddress, token: 'usdc' }),
+                ethOperator.checkTokenBalance({ address: ethAddress, token: 'usdt' })
+            ])
+                .then(([usdcBalance, usdtBalance]) => {
+                    compactIDB.readData('contacts', floAddress).then(result => {
+                        if (result) return
+                        compactIDB.addData('contacts', {
+                            ethAddress,
+                        }, floAddress).then(() => {
+                            renderSearchedAddressList()
+                        }).catch((error) => {
+                            console.error(error)
+                        })
                     })
+                    getRef('eth_address').value = ethAddress
+                    getRef('flo_address').value = floAddress
+                    getRef('usdc_balance').textContent = `${ethers.utils.formatUnits(usdcBalance, 6)} USDC`
+                    getRef('usdt_balance').textContent = `${ethers.utils.formatUnits(usdtBalance, 6)} USDT`
+                    getRef('eth_balance_wrapper').classList.remove('hidden')
+                    getRef('eth_balance_wrapper').animate([
+                        {
+                            transform: 'translateY(-1rem)',
+                            opacity: 0
+                        },
+                        {
+                            transform: 'none',
+                            opacity: 1
+                        }
+                    ], {
+                        easing: 'ease',
+                        duration: 300,
+                        fill: 'forwards'
+                    })
+                }).catch((error) => {
+                    notify(error, 'error')
+                }).finally(() => {
+                    buttonLoader('check_balance_button', false)
                 })
-                getRef('eth_address').value = ethAddress
-                getRef('flo_address').value = floAddress
-                getRef('usdc_balance').textContent = `${ethers.utils.formatUnits(usdcBalance, 6)} USDC`
-                getRef('usdt_balance').textContent = `${ethers.utils.formatUnits(usdtBalance, 6)} USDT`
-                getRef('eth_balance_wrapper').classList.remove('hidden')
-                getRef('eth_balance_wrapper').animate([
-                    {
-                        transform: 'translateY(-1rem)',
-                        opacity: 0
-                    },
-                    {
-                        transform: 'none',
-                        opacity: 1
-                    }
-                ], {
-                    easing: 'ease',
-                    duration: 300,
-                    fill: 'forwards'
-                })
-            }).catch((error) => {
-                notify(error, 'error')
-            }).finally(() => {
-                buttonLoader('check_balance_button', false)
-            })
         }
         function handleInvalidSearch() {
             if (document.startViewTransition)
