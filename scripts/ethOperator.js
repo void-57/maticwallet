@@ -292,6 +292,7 @@
     const receipt = await tx.wait();
     console.log("Transaction Hash:", tx.hash);
     console.log("Transaction Receipt:", receipt);
+    return tx.hash
   }
 
   const sendToken = ethOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
@@ -308,9 +309,10 @@
 
       // Wait for the transaction to be mined
       const receipt = await tx.wait();
-
+      // The transaction is now on chain!
       console.log('Transaction Hash:', tx.hash);
       console.log('Transaction Receipt:', receipt);
+      return tx.hash
     } catch (error) {
       console.error('Error:', error.message);
     }
