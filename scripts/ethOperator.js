@@ -1,8 +1,19 @@
-(function (EXPORTS) { //ethOperator v0.0.1
+(function (EXPORTS) { //ethOperator v0.0.2
   /* ETH Crypto and API Operator */
   if (!window.ethers)
     return console.error('ethers.js not found')
   const ethOperator = EXPORTS;
+  const isValidAddress = ethOperator.isValidAddress = (address) => {
+    try {
+      // Check if the address is a valid checksum address
+      const isValidChecksum = ethers.utils.isAddress(address);
+      // Check if the address is a valid non-checksum address
+      const isValidNonChecksum = ethers.utils.getAddress(address) === address.toLowerCase();
+      return isValidChecksum || isValidNonChecksum;
+    } catch (error) {
+      return false;
+    }
+  }
   const ERC20ABI = [
     {
       "constant": true,
@@ -255,7 +266,21 @@
     })
   }
   // connectToMetaMask();
-  const checkTokenBalance = ethOperator.checkTokenBalance = async ({ address, token, contractAddress }) => {
+  const getBalance = ethOperator.getBalance = async (address) => {
+    try {
+      if (!address || !isValidAddress(address))
+        return new Error('Invalid address');
+      // Get the balance
+      const provider = getProvider();
+      const balanceWei = await provider.getBalance(address);
+      const balanceEth = ethers.utils.formatEther(balanceWei);
+      return balanceEth;
+    } catch (error) {
+      console.error('Error:', error.message);
+      return error;
+    }
+  }
+  const getTokenBalance = ethOperator.getTokenBalance = async ({ address, token, contractAddress }) => {
     try {
       // if (!window.ethereum.isConnected()) {
       //   await connectToMetaMask();
@@ -273,6 +298,7 @@
   }
 
   const sendTransaction = ethOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
+    const provider = getProvider();
     const signer = new ethers.Wallet(privateKey, provider);
     const limit = provider.estimateGas({
       from: signer.address,
@@ -287,12 +313,8 @@
       gasLimit: limit,
       nonce: signer.getTransactionCount(),
       maxPriorityFeePerGas: ethers.utils.parseUnits("2", "gwei"),
-      chainId: 3,
     });
-    const receipt = await tx.wait();
-    console.log("Transaction Hash:", tx.hash);
-    console.log("Transaction Receipt:", receipt);
-    return tx.hash
+    return { tx, hash: tx.hash }
   }
 
   const sendToken = ethOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
@@ -306,13 +328,7 @@
 
       // Call the transfer function on the USDC contract
       const tx = await tokenContract.transfer(receiver, amountWei);
-
-      // Wait for the transaction to be mined
-      const receipt = await tx.wait();
-      // The transaction is now on chain!
-      console.log('Transaction Hash:', tx.hash);
-      console.log('Transaction Receipt:', receipt);
-      return tx.hash
+      return { tx, hash: tx.hash }
     } catch (error) {
       console.error('Error:', error.message);
     }
