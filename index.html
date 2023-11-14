@@ -571,7 +571,6 @@
         router.addRoute('balance', renderHome)
         function renderHome(state) {
             getRef('page_container').dataset.page = 'home'
-            const isConnectedToEthMainnet = window.currentChainId && window.currentChainId === '0x1'
             renderElem(getRef('page_container'), html`
                 <aside id="saved_addresses_wrapper" class="flex flex-direction-column">
                     <h4>
@@ -581,7 +580,7 @@
                 </aside>
                 <section id="balance_section" class="grid gap-1-5">
                     <h2>
-                        Check USDC/USDT balance
+                        Check Ether, USDC and USDT balance
                     </h2>
                     <sm-form oninvalid="handleInvalidSearch()">
                         <div id="input_wrapper">
@@ -615,6 +614,10 @@
                             <h4>Balance</h4>
                             <ul id="eth_address_balance" class="flex flex-direction-column gap-0-5">
                                 <li class="flex align-center space-between">
+                                    <p>Ether</p>
+                                    <b id="ether_balance">0</b>
+                                </li>
+                                <li class="flex align-center space-between">
                                     <p>USDC</p>
                                     <b id="usdc_balance">0</b>
                                 </li>
@@ -627,8 +630,8 @@
                     </div>
                 </section>
             `)
-            if (window.ethereum && !isConnectedToEthMainnet) {
-                renderError('Please install MetaMask browser extension to use this app')
+            if (window.ethereum && !(window.currentChainId && window.currentChainId === '0x1')) {
+                renderError('Please switch MetaMask to Ethereum Mainnet')
             }
             renderSearchedAddressList()
         }
@@ -705,10 +708,12 @@
             if (!ethAddress) return
             buttonLoader('check_balance_button', true)
             Promise.all([
+                ethOperator.getBalance(ethAddress),
                 ethOperator.getTokenBalance({ address: ethAddress, token: 'usdc' }),
                 ethOperator.getTokenBalance({ address: ethAddress, token: 'usdt' })
             ])
-                .then(([usdcBalance, usdtBalance]) => {
+                .then(([etherBalance, usdcBalance, usdtBalance]) => {
+                    console.log(etherBalance, usdcBalance, usdtBalance)
                     compactIDB.readData('contacts', floAddress).then(result => {
                         if (result) return
                         compactIDB.addData('contacts', {
@@ -721,8 +726,9 @@
                     })
                     getRef('eth_address').value = ethAddress
                     getRef('flo_address').value = floAddress
-                    getRef('usdc_balance').textContent = `${ethers.utils.formatUnits(usdcBalance, 6)} USDC`
-                    getRef('usdt_balance').textContent = `${ethers.utils.formatUnits(usdtBalance, 6)} USDT`
+                    getRef('ether_balance').textContent = `${etherBalance} ETH`
+                    getRef('usdc_balance').textContent = `${usdcBalance} USDC`
+                    getRef('usdt_balance').textContent = `${usdtBalance} USDT`
                     getRef('eth_balance_wrapper').classList.remove('hidden')
                     getRef('eth_balance_wrapper').animate([
                         {
@@ -812,6 +818,9 @@
                     </fieldset>
                 </sm-form>
             `)
+            if (window.ethereum && !(window.currentChainId && window.currentChainId === '0x1')) {
+                renderError('Please switch MetaMask to Ethereum Mainnet')
+            }
         })
         function togglePrivateKeyVisibility(input) {
             const target = input.closest('sm-input')

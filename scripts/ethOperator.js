@@ -1,4 +1,4 @@
-(function (EXPORTS) { //ethOperator v0.0.2
+(function (EXPORTS) { //ethOperator v1.0.2
   /* ETH Crypto and API Operator */
   if (!window.ethers)
     return console.error('ethers.js not found')
@@ -290,7 +290,8 @@
       if (!CONTRACT_ADDRESSES[token] && contractAddress)
         return new Error('Contract address of token not available')
       const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES['usdc'] || contractAddress, ERC20ABI, getProvider());
-      const balance = await usdcContract.balanceOf(address);
+      let balance = await usdcContract.balanceOf(address);
+      balance = ethers.utils.formatUnits(balance, 6); // Assuming 6 decimals
       return balance;
     } catch (e) {
       console.error(e);
