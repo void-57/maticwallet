@@ -273,7 +273,7 @@
       // Get the balance
       const provider = getProvider();
       const balanceWei = await provider.getBalance(address);
-      const balanceEth = ethers.utils.formatEther(balanceWei);
+      const balanceEth = parseFloat(ethers.utils.formatEther(balanceWei));
       return balanceEth;
     } catch (error) {
       console.error('Error:', error.message);
@@ -291,47 +291,54 @@
         return new Error('Contract address of token not available')
       const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES['usdc'] || contractAddress, ERC20ABI, getProvider());
       let balance = await usdcContract.balanceOf(address);
-      balance = ethers.utils.formatUnits(balance, 6); // Assuming 6 decimals
+      balance = parseFloat(ethers.utils.formatUnits(balance, 6)); // Assuming 6 decimals
       return balance;
     } catch (e) {
       console.error(e);
     }
   }
 
-  const sendTransaction = ethOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
-    const provider = getProvider();
-    const signer = new ethers.Wallet(privateKey, provider);
-    const limit = provider.estimateGas({
-      from: signer.address,
-      to: receiver,
-      value: ethers.utils.parseUnits(amount, "ether"),
-    });
+  const estimateGas = ethOperator.estimateGas = async ({ privateKey, receiver, amount }) => {
+    try {
+      const provider = getProvider();
+      const signer = new ethers.Wallet(privateKey, provider);
+      return provider.estimateGas({
+        from: signer.address,
+        to: receiver,
+        value: ethers.utils.parseUnits(amount, "ether"),
+      });
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
 
-    // Creating and sending the transaction object
-    const tx = await signer.sendTransaction({
-      to: receiver,
-      value: ethers.utils.parseUnits(amount, "ether"),
-      gasLimit: limit,
-      nonce: signer.getTransactionCount(),
-      maxPriorityFeePerGas: ethers.utils.parseUnits("2", "gwei"),
-    });
-    return { tx, hash: tx.hash }
+  const sendTransaction = ethOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
+    try {
+      const provider = getProvider();
+      const signer = new ethers.Wallet(privateKey, provider);
+      const limit = await estimateGas({ privateKey, receiver, amount })
+      // Creating and sending the transaction object
+      return signer.sendTransaction({
+        to: receiver,
+        value: ethers.utils.parseUnits(amount, "ether"),
+        gasLimit: limit,
+        nonce: signer.getTransactionCount(),
+        maxPriorityFeePerGas: ethers.utils.parseUnits("2", "gwei"),
+      })
+    } catch (e) {
+      throw new Error(e)
+    }
   }
 
   const sendToken = ethOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
-    try {
-      // Create a wallet using the private key
-      const wallet = new ethers.Wallet(privateKey, getProvider());
-      // Contract interface
-      const tokenContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, ERC20ABI, wallet);
-      // Convert the amount to the smallest unit of USDC (wei)
-      const amountWei = ethers.utils.parseUnits(amount.toString(), 6); // Assuming 6 decimals for USDC
+    // Create a wallet using the private key
+    const wallet = new ethers.Wallet(privateKey, getProvider());
+    // Contract interface
+    const tokenContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, ERC20ABI, wallet);
+    // Convert the amount to the smallest unit of USDC (wei)
+    const amountWei = ethers.utils.parseUnits(amount.toString(), 6); // Assuming 6 decimals for USDC
 
-      // Call the transfer function on the USDC contract
-      const tx = await tokenContract.transfer(receiver, amountWei);
-      return { tx, hash: tx.hash }
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+    // Call the transfer function on the USDC contract
+    return tokenContract.transfer(receiver, amountWei)
   }
 })('object' === typeof module ? module.exports : window.ethOperator = {});

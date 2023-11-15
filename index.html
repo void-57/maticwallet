@@ -189,43 +189,33 @@
         let zIndex = 50
         // function required for popups or modals to appear
         function openPopup(popupId, pinned) {
+            if (popupStack.peek() === undefined) {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closePopup()
+                    }
+                })
+            }
             zIndex++
             getRef(popupId).setAttribute('style', `z-index: ${zIndex}`)
-            getRef(popupId).show({ pinned })
-            return getRef(popupId);
+            return getRef(popupId).show({ pinned })
         }
 
         // hides the popup or modal
-        function closePopup() {
+        function closePopup(options = {}) {
             if (popupStack.peek() === undefined)
                 return;
-            popupStack.peek().popup.hide()
+            popupStack.peek().popup.hide(options)
         }
 
         document.addEventListener('popupopened', async e => {
             switch (e.target.id) {
-                case 'saved_ids_popup':
-                    const allSavedIds = await getArrayOfSavedIds()
-                    const renderedIds = renderContactPickerList(allSavedIds)
-                    renderElem(getRef('saved_ids_picker_list'), html`${renderedIds}`)
-                    getRef('search_saved_ids_picker').focusIn()
-                    break;
+
             }
         })
         document.addEventListener('popupclosed', e => {
             zIndex--
             switch (e.target.id) {
-                case 'saved_ids_popup':
-                    renderElem(getRef('saved_ids_picker_list'), html``)
-                    getRef('search_saved_ids_picker').value = ''
-                    floGlobals.addressSelectorTarget = null
-                    break;
-                case 'transaction_result_popup':
-                    renderElem(getRef('transaction_result'), html``)
-                    break;
-                case 'retrieve_flo_id_popup':
-                    getRef('recovered_flo_id_wrapper').classList.add('hidden')
-                    break;
             }
         })
         //Function for displaying toast notifications. pass in error for mode param if you want to show an error.
@@ -493,11 +483,6 @@
         window.addEventListener('load', () => {
             router.routeTo(location.hash)
             document.body.classList.remove('hidden')
-            document.addEventListener('keyup', (e) => {
-                if (e.key === 'Escape') {
-                    closePopup()
-                }
-            })
             document.addEventListener('copy', () => {
                 notify('copied', 'success')
             })
@@ -713,7 +698,6 @@
                 ethOperator.getTokenBalance({ address: ethAddress, token: 'usdt' })
             ])
                 .then(([etherBalance, usdcBalance, usdtBalance]) => {
-                    console.log(etherBalance, usdcBalance, usdtBalance)
                     compactIDB.readData('contacts', floAddress).then(result => {
                         if (result) return
                         compactIDB.addData('contacts', {
@@ -778,8 +762,11 @@
                 <sm-form id="send_tx_form" style="width: min(32rem, 100%)">
                     <fieldset class="flex flex-direction-column gap-0-5">
                         <div class="flex space-between align-center">
-                            <h4>Sender</h4>
-                            <button id="check_balance_button" class="button button--small button--colored" onclick="checkBalance()" disabled>
+                            <div class="flex flex-direction-column gap-0-5">
+                                <h4>Sender</h4>
+                                <p>Amount will be deducted from equivalent Ethereum address</p>
+                            </div>
+                            <button id="check_balance_button" class="button button--small button--colored" onclick="checkSenderBalance()" disabled>
                                 Check balance
                             </button>
                         </div>
@@ -798,17 +785,17 @@
                             <h4>Receiver</h4>
                             <div class="grid gap-0-5">
                                 <sm-input class="receiver-address" placeholder="Receiver's Ethereum address" data-eth-address animate required ></sm-input>
-                                <div class="flex gap-0-5">
+                                <div class="flex flex-direction-column gap-0-5">
                                     <sm-input class="receiver-amount amount-shown flex-1" placeholder="Amount" type="number" step="0.000001" min="0.000001" error-text="Amount should be grater than 0.000001 ETHER" animate required>
                                         <div class="asset-symbol flex" slot="icon">
                                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"> <g clip-path="url(#clip0_201_2)"> <path d="M12 0L19.6368 12.4368L12.1633 16.8L4.36325 12.4368L12 0Z"/> <path d="M12 24L4.36325 13.6099L11.8367 18L19.6368 13.6099L12 24Z"/> </g> <defs> <clipPath id="clip0_201_2"> <rect width="24" height="24" fill="white"/> </clipPath> </defs> </svg>
                                         </div>
                                     </sm-input>
-                                    <sm-select id="asset_selector" style="min-width: 6rem" onchange=${handleAssetChange}>
-                                        <sm-option value="ether">ETHER</sm-option>
-                                        <sm-option value="usdc">USDC</sm-option>
-                                        <sm-option value="usdt">USDT</sm-option>
-                                    </sm-select>
+                                    <sm-chips id="asset_selector" onchange=${handleAssetChange}>
+                                        <sm-chip value="ether" selected>ETHER</sm-chip>
+                                        <sm-chip value="usdc">USDC</sm-chip>
+                                        <sm-chip value="usdt">USDT</sm-chip>
+                                    </sm-chips>
                                 </div>
                             </div>
                         </div>
@@ -827,39 +814,34 @@
             target.type = target.type === 'password' ? 'text' : 'password';
             target.focusIn()
         }
-        // function checkBalance() {
-        //     let address;
-        //     const hasProvidedPrivateKey = !!getRef('private_key_input')
-        //     if (hasProvidedPrivateKey) {
-        //         const wif = getRef('private_key_input').value.trim()
-        //         if (!wif)
-        //             return notify(`Please enter sender's private key to check balance`)
-        //         address = getTaprootAddress(wif).tr.address
-        //     } else {
-        //         address = getRef('taproot_sender_input').value.trim()
-        //     }
-        //     getRef('sender_balance_container').classList.remove('hidden')
-        //     renderElem(getRef('sender_balance_container'), html`
-        //         Loading balance...<sm-spinner></sm-spinner>
-        //     `)
-        //     btcOperator.getBalance(address).then(balance => {
-        //         renderElem(getRef('sender_balance_container'), html`
-        //             <div class="grid gap-1" style="padding: 1rem; border-radius: 0.5rem; border: solid thin rgba(var(--text-color),0.3)">
-        //                 ${hasProvidedPrivateKey ? html`
-        //                     <div class="grid">
-        //                         <p class="label">Sender address</p>
-        //                         <sm-copy value=${address}><p>${address}<p></sm-copy>
-        //                     </div>
-        //                 `: ''}
-        //                 <p>
-        //                     Balance: <b class="amount-shown" data-btc-amount=${balance}>${getConvertedAmount(balance, true)}</b>
-        //                 </p>
-        //             </div>
-        //         `)
-        //     }).catch(err => {
-        //         notify(e, 'error')
-        //     })
-        // }
+        function checkSenderBalance() {
+            let address;
+            const wif = getRef('private_key_input').value.trim()
+            if (!wif)
+                return notify(`Please enter sender's private key to check balance`)
+            address = floEthereum.ethAddressFromPrivateKey(coinjs.wif2privkey(wif).privkey)
+            getRef('sender_balance_container').classList.remove('hidden')
+            renderElem(getRef('sender_balance_container'), html` Loading balance...<sm-spinner></sm-spinner> `)
+            const promises = [ethOperator.getBalance(address)]
+            const selectedAsset = getRef('asset_selector').value
+            if (selectedAsset !== 'ether')
+                promises.push(ethOperator.getTokenBalance({ address, token: selectedAsset }))
+            Promise.all(promises).then(([ethBalance, tokenBalance]) => {
+                renderElem(getRef('sender_balance_container'), html`
+                    <div class="grid gap-1 w-100" style="padding: 1rem; border-radius: 0.5rem; border: solid thin rgba(var(--text-color),0.3)">
+                        <div class="grid">
+                            <p class="label">Sender address</p>
+                            <sm-copy value=${address}><p>${address}<p></sm-copy>
+                        </div>
+                        <p>
+                            Balance: <b class="amount-shown">${ethBalance} ETH</b> ${selectedAsset !== 'ether' ? html`| <b class="amount-shown">${tokenBalance} ${selectedAsset.toUpperCase()}</b>` : ''}
+                        </p>
+                    </div>
+                `)
+            }).catch(err => {
+                notify(err, 'error')
+            })
+        }
         function handleSenderInput(e) {
             getRef('check_balance_button').disabled = !e.target.isValid
             if (!e.target.isValid) {
@@ -877,60 +859,103 @@
             getRef('send_tx_button').textContent = `Send ${asset.toUpperCase()}`
         }
         async function sendTx() {
+            const receiver = getRef('send_tx_form').querySelector('.receiver-address').value.trim();
+            const amount = getRef('send_tx_form').querySelector('.receiver-amount').value.trim();
+            const asset = getRef('asset_selector').value;
             try {
-                const receiver = getRef('send_tx_form').querySelector('.receiver-address').value.trim();
-                const amount = parseFloat(getRef('send_tx_form').querySelector('.receiver-amount').value.trim());
-                const asset = getRef('asset_selector').value;
                 const confirmation = await getConfirmation('Send transaction', {
                     message: `You are about to send ${amount} ${asset.toUpperCase()} to ${receiver}`,
                     confirmText: 'Send',
                 })
-                const privateKey = getRef('private_key_input').value.trim()
+                buttonLoader('send_tx_button', true)
+                if (!confirmation) return
+                let privateKey = getRef('private_key_input').value.trim()
+                if (/^[0-9a-fA-F]{64}$/.test(privateKey)) {
+                    privateKey = coinjs.privkey2wif(privateKey)
+                }
+                privateKey = coinjs.wif2privkey(privateKey).privkey;
                 switch (asset) {
                     case 'ether': {
-                        const { tx, hash } = await ethOperator.sendTransaction({
+                        const tx = await ethOperator.sendTransaction({
                             privateKey,
                             receiver,
                             amount,
                         })
-                        notify(`Transaction sent.`, 'success')
+                        showTransactionResult('pending', { txHash: tx.hash })
                         await tx.wait()
-                        notify(`Transaction confirmed.`, 'success')
+                        showTransactionResult('confirmed', { txHash: tx.hash })
                         break;
                     }
                     case 'usdc':
                     case 'usdt': {
-                        const { tx, hash } = await ethOperator.sendToken({
+                        const tx = await ethOperator.sendToken({
                             privateKey,
                             receiver,
                             amount,
                             token: asset
                         })
-                        notify(`Transaction sent.`, 'success')
+                        showTransactionResult('pending', { txHash: tx.hash })
                         await tx.wait()
-                        notify(`Transaction confirmed.`, 'success')
+                        showTransactionResult('confirmed', { txHash: tx.hash })
                         break;
                     }
                 }
+                getRef('send_tx_form').reset()
+                getRef('sender_balance_container').classList.add('hidden')
             } catch (e) {
-                console.error(e)
+                console.error(e.message)
+                const regex = /\(error=({.*?}),/;
+                const match = e.message.match(regex);
+                if (match && match[1]) {
+                    const { code } = JSON.parse(match[1]);
+                    if (code === -32000)
+                        showTransactionResult('failed', { description: `Insufficient ${asset.toUpperCase()} balance` })
+                    else {
+                        showTransactionResult('failed', { description: e.message })
+                    }
+                }
+            } finally {
+                buttonLoader('send_tx_button', false)
             }
         }
-        function showTransactionResult(status, txid) {
+        function showTransactionResult(status, { txHash, description = '' }) {
             switch (status) {
-                case 'success':
+                case 'pending':
                     renderElem(getRef('transaction_result_popup__content'), html`
-                        <svg class="icon user-action-result__icon success" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"> <path d="M0 0h24v24H0V0z" fill="none" /> <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" /> </svg>
+                        <svg class="icon user-action-result__icon pending" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                         <div class="grid gap-0-5 justify-center text-center">
                             <h4>Transaction sent</h4>
-                            <p>Confirmation of transaction might take few hours. </p>
+                            <p>Waiting for confirmation from blockchain</p>
                         </div>
                         <div class="grid">
                             <span class="label">Transaction ID</span>
-                            <sm-copy value=${txid}></sm-copy>
+                            <sm-copy value=${txHash}></sm-copy>
                         </div>
-                        <a class="button button--primary" href=${`https://ranchimall.github.io/btcwallet/#/check_details?query=${txid}`}>Check transaction status</a>
+                        <a class="button button--primary" target="_blank" href=${`https://etherscan.io/tx/${txHash}`}>Check transaction status</a>
                     `)
+                    break;
+                case 'confirmed':
+                    renderElem(getRef('transaction_result_popup__content'), html`
+                        <svg class="icon user-action-result__icon confirmed" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"> <path d="M0 0h24v24H0V0z" fill="none" /> <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" /> </svg>
+                        <div class="grid gap-0-5 justify-center text-center">
+                            <h4>Transaction confirmed</h4>
+                            <p>Transaction has been confirmed on the blockchain. </p>
+                        </div>
+                        <div class="grid">
+                            <span class="label">Transaction ID</span>
+                            <sm-copy value=${txHash}></sm-copy>
+                        </div>
+                        <a class="button button--primary" target="_blank" href=${`https://etherscan.io/tx/${txHash}`}>Check transaction status</a>
+                    `)
+                    break;
+                case 'failed':
+                    renderElem(getRef('transaction_result_popup__content'), html`
+                            <svg class="icon user-action-result__icon failed" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <div class="grid gap-0-5 justify-center text-center">
+                                <h4>Transaction failed</h4>
+                                <p>${description}</p>
+                            </div>
+                        `)
                     break;
             }
             openPopup('transaction_result_popup')

@@ -976,10 +976,14 @@ aside h4 {
   border-radius: 5rem;
   -webkit-animation: popup 1s;
           animation: popup 1s;
-}
-.user-action-result__icon.success {
-  fill: rgba(var(--background-color), 1);
   padding: 1rem;
+}
+.user-action-result__icon.pending {
+  fill: var(--yellow);
+  background-color: rgba(var(--text-color), 0.03);
+}
+.user-action-result__icon.confirmed {
+  fill: rgba(var(--background-color), 1);
   background-color: #0bbe56;
 }
 .user-action-result__icon.failed {
