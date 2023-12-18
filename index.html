@@ -452,7 +452,7 @@
             routingStart(state) {
             },
             routingEnd(state) {
-                const { page } = state
+                let { page } = state
                 if (!page)
                     page = 'search'
                 if (page !== 'send') {
