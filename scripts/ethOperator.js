@@ -242,10 +242,16 @@
   }
   function getProvider() {
     // switches provider based on whether the user is using MetaMask or not
+    const bscMainnet = {
+      chainId: 56,
+      name: 'binance',
+      rpc: 'https://bsc-dataseed.binance.org/',
+      explorer: 'https://bscscan.com'
+    };
     if (window.ethereum) {
       return new ethers.providers.Web3Provider(window.ethereum);
     } else {
-      return new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/6e12fee52bdd48208f0d82fb345bcb3c`)
+      return new ethers.providers.JsonRpcProvider(bscMainnet.rpc, bscMainnet)
     }
   }
   function connectToMetaMask() {
