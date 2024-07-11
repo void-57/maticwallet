@@ -1,9 +1,9 @@
-(function (EXPORTS) { //ethOperator v1.0.2
+(function (EXPORTS) { //bscOperator v1.0.2
   /* ETH Crypto and API Operator */
   if (!window.ethers)
     return console.error('ethers.js not found')
-  const ethOperator = EXPORTS;
-  const isValidAddress = ethOperator.isValidAddress = (address) => {
+  const bscOperator = EXPORTS;
+  const isValidAddress = bscOperator.isValidAddress = (address) => {
     try {
       // Check if the address is a valid checksum address
       const isValidChecksum = ethers.utils.isAddress(address);
@@ -14,7 +14,7 @@
       return false;
     }
   }
-  const ERC20ABI = [
+  const BEP20ABI = [
     {
       "constant": true,
       "inputs": [],
@@ -237,8 +237,8 @@
     }
   ]
   const CONTRACT_ADDRESSES = {
-    usdc: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    usdt: "0xdac17f958d2ee523a2206206994597c13d831ec7"
+    usdc: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+    usdt: "0x55d398326f99059ff775485246999027b3197955"
   }
   function getProvider() {
     // switches provider based on whether the user is using MetaMask or not
@@ -272,7 +272,7 @@
     })
   }
   // connectToMetaMask();
-  const getBalance = ethOperator.getBalance = async (address) => {
+  const getBalance = bscOperator.getBalance = async (address) => {
     try {
       if (!address || !isValidAddress(address))
         return new Error('Invalid address');
@@ -286,7 +286,7 @@
       return error;
     }
   }
-  const getTokenBalance = ethOperator.getTokenBalance = async (address, token, { contractAddress } = {}) => {
+  const getTokenBalance = bscOperator.getTokenBalance = async (address, token, { contractAddress } = {}) => {
     try {
       // if (!window.ethereum.isConnected()) {
       //   await connectToMetaMask();
@@ -295,7 +295,7 @@
         return new Error("Token not specified");
       if (!CONTRACT_ADDRESSES[token] && contractAddress)
         return new Error('Contract address of token not available')
-      const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, ERC20ABI, getProvider());
+      const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, getProvider());
       let balance = await usdcContract.balanceOf(address);
       balance = parseFloat(ethers.utils.formatUnits(balance, 6)); // Assuming 6 decimals
       return balance;
@@ -304,7 +304,7 @@
     }
   }
 
-  const estimateGas = ethOperator.estimateGas = async ({ privateKey, receiver, amount }) => {
+  const estimateGas = bscOperator.estimateGas = async ({ privateKey, receiver, amount }) => {
     try {
       const provider = getProvider();
       const signer = new ethers.Wallet(privateKey, provider);
@@ -318,7 +318,7 @@
     }
   }
 
-  const sendTransaction = ethOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
+  const sendTransaction = bscOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
     try {
       const provider = getProvider();
       const signer = new ethers.Wallet(privateKey, provider);
@@ -336,15 +336,15 @@
     }
   }
 
-  const sendToken = ethOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
+  const sendToken = bscOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
     // Create a wallet using the private key
     const wallet = new ethers.Wallet(privateKey, getProvider());
     // Contract interface
-    const tokenContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, ERC20ABI, wallet);
+    const tokenContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, wallet);
     // Convert the amount to the smallest unit of USDC (wei)
     const amountWei = ethers.utils.parseUnits(amount.toString(), 6); // Assuming 6 decimals for USDC
 
     // Call the transfer function on the USDC contract
     return tokenContract.transfer(receiver, amountWei)
   }
-})('object' === typeof module ? module.exports : window.ethOperator = {});
+})('object' === typeof module ? module.exports : window.bscOperator = {});
