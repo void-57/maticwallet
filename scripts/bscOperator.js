@@ -288,19 +288,32 @@
   }
   const getTokenBalance = bscOperator.getTokenBalance = async (address, token, { contractAddress } = {}) => {
     try {
-      // if (!window.ethereum.isConnected()) {
-      //   await connectToMetaMask();
-      // }
-      if (!token)
-        return new Error("Token not specified");
-      if (!CONTRACT_ADDRESSES[token] && contractAddress)
-        return new Error('Contract address of token not available')
-      const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, getProvider());
-      let balance = await usdcContract.balanceOf(address);
-      balance = parseFloat(ethers.utils.formatUnits(balance, 6)); // Assuming 6 decimals
+      if (!address) {
+        throw new Error("Address not specified");
+      }
+      if (!token) {
+        throw new Error("Token not specified");
+      }
+      if (!CONTRACT_ADDRESSES[token] && !contractAddress) {
+        throw new Error("Contract address of token not available");
+      }
+  
+      const provider = getProvider(); // Ensure this returns a valid provider for BSC
+      const contract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, provider);
+      
+      let balance = await contract.balanceOf(address);
+      
+      // Assuming 18 decimals for most tokens like USDT and USDC
+      const decimals = 18;
+      balance = parseFloat(ethers.utils.formatUnits(balance, decimals)); 
+  
+      // Format the balance to 2 decimal places for display
+      balance = balance.toFixed(2);
+  
       return balance;
     } catch (e) {
-      console.error(e);
+      console.error("Error getting token balance:", e.message);
+      throw new Error("Failed to get token balance");
     }
   }
 

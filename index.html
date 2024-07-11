@@ -713,7 +713,7 @@
         // })
         if (typeof window.ethereum !== "undefined") {
           ethereum.on("accountsChanged", (accounts) => {
-            getRef("BSC_balance_wrapper").classList.add("hidden");
+            getRef("bsc_balance_wrapper").classList.add("hidden");
             setMetaMaskStatus(accounts.length > 0);
           });
           ethereum.on("connect", (accounts) => {
@@ -824,7 +824,7 @@
                   </div>
                 </div>
               </sm-form>
-              <div id="BSC_balance_wrapper" class="grid gap-2 hidden"></div>
+              <div id="bsc_balance_wrapper" class="grid gap-2 hidden"></div>
             </section>
           `
         );
@@ -1053,17 +1053,20 @@
                   });
               });
             renderElem(
-              getRef("BSC_balance_wrapper"),
+              getRef("bsc_balance_wrapper"),
               html`
                 <div class="grid">
                   <div class="label">BSC address</div>
-                  <sm-copy id="BSC_address" value=${BSCAddress}></sm-copy>
+                  <sm-copy id="BSC_address" value="${BSCAddress}"></sm-copy>
                 </div>
                 ${floAddress && floAddress !== BSCAddress
                   ? html`
                       <div class="grid">
                         <div class="label">FLO address</div>
-                        <sm-copy id="flo_address" value=${floAddress}></sm-copy>
+                        <sm-copy
+                          id="flo_address"
+                          value="${floAddress}"
+                        ></sm-copy>
                       </div>
                     `
                   : ""}
@@ -1089,8 +1092,8 @@
                 </div>
               `
             );
-            getRef("BSC_balance_wrapper").classList.remove("hidden");
-            getRef("BSC_balance_wrapper").animate(
+            getRef("bsc_balance_wrapper").classList.remove("hidden");
+            getRef("bsc_balance_wrapper").animate(
               [
                 {
                   transform: "translateY(-1rem)",
@@ -1118,10 +1121,10 @@
       function handleInvalidSearch() {
         if (document.startViewTransition)
           document.startViewTransition(() => {
-            getRef("BSC_balance_wrapper").classList.add("hidden");
+            getRef("bsc_balance_wrapper").classList.add("hidden");
           });
         else {
-          getRef("BSC_balance_wrapper").classList.add("hidden");
+          getRef("bsc_balance_wrapper").classList.add("hidden");
         }
       }
       async function deleteContact(floAddress) {
