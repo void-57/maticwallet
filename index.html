@@ -406,6 +406,9 @@
       document.addEventListener("popupclosed", (e) => {
         zIndex--;
         switch (e.target.id) {
+          case "retrieve_btc_addr_popup":
+            getRef("recovered_btc_addr_wrapper").classList.add("hidden");
+            break;
         }
       });
       //Function for displaying toast notifications. pass in error for mode param if you want to show an error.
@@ -1838,15 +1841,6 @@
             retrieve();
           });
         } else retrieve();
-      }
-      function wif2SolanaAddress(wif) {
-        var k1, k2, k3, k4, k5;
-        k1 = coinjs.wif2privkey(wif);
-        k2 = Crypto.util.hexToBytes(k1.privkey);
-        k3 = Uint8Array.from(k2);
-        k4 = solanaWeb3.Keypair.fromSeed(k3);
-        k5 = k4.publicKey.toString();
-        return k5;
       }
     </script>
   </body>
