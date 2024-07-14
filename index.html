@@ -254,7 +254,7 @@
         <div class="grid gap-0-5">
           <h4>Did you forget your Binance Address?</h4>
           <p>
-            If you have your Binance Private Key, enter it here and recover your
+            If you have your BSC/BTC/FLO Private Key, enter it here and recover your
             Binance Address.
           </p>
         </div>
@@ -266,7 +266,7 @@
           <sm-input
             id="retrieve_btc_addr_field"
             type="password"
-            placeholder="Binance Private Key"
+            placeholder="BSC/BTC/FLO Private Key"
             class="password-field"
             data-private-key
             required
@@ -629,29 +629,29 @@
     <script>
       const assetIcons = {
         Binance: `<svg hight="34" width="34" version="1.0" id="katman_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 800 600" style="enable-background:new 0 0 800 600;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#F3BA2F;}
-	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#131415;}
-</style>
-<g id="Light">
-	<g id="OneArt-_x2022_-Desktop-_x2022_-Light" transform="translate(-457.000000, -1515.000000)">
-		<g id="Block" transform="translate(41.000000, 1263.000000)">
-			<g id="TVL" transform="translate(48.000000, 252.000000)">
-				<g id="Icons_x2F_Icon-24_x2F_cake" transform="translate(368.000000, 0.000000)">
-					<circle id="Oval" class="st0" cx="399.8" cy="299.6" r="230.7"/>
-					<g id="Icons_x2F_icon-24_x2F_networks_x2F_binance_x5F_smart_x5F_chain" transform="translate(3.333333, 3.333333)">
-						<path id="Combined-Shape" class="st1" d="M456.3,320.8l34.8,34.7L396.5,450L302,355.5l34.8-34.7l59.7,59.7L456.3,320.8z
-							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
-							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
-							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"/>
-					</g>
-				</g>
-			</g>
-		</g>
-	</g>
-</g>
-</svg>`,
+      	 viewBox="0 0 800 600" style="enable-background:new 0 0 800 600;" xml:space="preserve">
+      <style type="text/css">
+      	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#F3BA2F;}
+      	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#131415;}
+      </style>
+      <g id="Light">
+      	<g id="OneArt-_x2022_-Desktop-_x2022_-Light" transform="translate(-457.000000, -1515.000000)">
+      		<g id="Block" transform="translate(41.000000, 1263.000000)">
+      			<g id="TVL" transform="translate(48.000000, 252.000000)">
+      				<g id="Icons_x2F_Icon-24_x2F_cake" transform="translate(368.000000, 0.000000)">
+      					<circle id="Oval" class="st0" cx="399.8" cy="299.6" r="230.7"/>
+      					<g id="Icons_x2F_icon-24_x2F_networks_x2F_binance_x5F_smart_x5F_chain" transform="translate(3.333333, 3.333333)">
+      						<path id="Combined-Shape" class="st1" d="M456.3,320.8l34.8,34.7L396.5,450L302,355.5l34.8-34.7l59.7,59.7L456.3,320.8z
+      							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
+      							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
+      							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"/>
+      					</g>
+      				</g>
+      			</g>
+      		</g>
+      	</g>
+      </g>
+      </svg>`,
         usdc: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" data-name="86977684-12db-4850-8f30-233a7c267d11" viewBox="0 0 2000 2000"> <path d="M1000 2000c554.17 0 1000-445.83 1000-1000S1554.17 0 1000 0 0 445.83 0 1000s445.83 1000 1000 1000z" fill="#2775ca"/> <path d="M1275 1158.33c0-145.83-87.5-195.83-262.5-216.66-125-16.67-150-50-150-108.34s41.67-95.83 125-95.83c75 0 116.67 25 137.5 87.5 4.17 12.5 16.67 20.83 29.17 20.83h66.66c16.67 0 29.17-12.5 29.17-29.16v-4.17c-16.67-91.67-91.67-162.5-187.5-170.83v-100c0-16.67-12.5-29.17-33.33-33.34h-62.5c-16.67 0-29.17 12.5-33.34 33.34v95.83c-125 16.67-204.16 100-204.16 204.17 0 137.5 83.33 191.66 258.33 212.5 116.67 20.83 154.17 45.83 154.17 112.5s-58.34 112.5-137.5 112.5c-108.34 0-145.84-45.84-158.34-108.34-4.16-16.66-16.66-25-29.16-25h-70.84c-16.66 0-29.16 12.5-29.16 29.17v4.17c16.66 104.16 83.33 179.16 220.83 200v100c0 16.66 12.5 29.16 33.33 33.33h62.5c16.67 0 29.17-12.5 33.34-33.33v-100c125-20.84 208.33-108.34 208.33-220.84z" fill="#fff"/> <path d="M787.5 1595.83c-325-116.66-491.67-479.16-370.83-800 62.5-175 200-308.33 370.83-370.83 16.67-8.33 25-20.83 25-41.67V325c0-16.67-8.33-29.17-25-33.33-4.17 0-12.5 0-16.67 4.16-395.83 125-612.5 545.84-487.5 941.67 75 233.33 254.17 412.5 487.5 487.5 16.67 8.33 33.34 0 37.5-16.67 4.17-4.16 4.17-8.33 4.17-16.66v-58.34c0-12.5-12.5-29.16-25-37.5zM1229.17 295.83c-16.67-8.33-33.34 0-37.5 16.67-4.17 4.17-4.17 8.33-4.17 16.67v58.33c0 16.67 12.5 33.33 25 41.67 325 116.66 491.67 479.16 370.83 800-62.5 175-200 308.33-370.83 370.83-16.67 8.33-25 20.83-25 41.67V1700c0 16.67 8.33 29.17 25 33.33 4.17 0 12.5 0 16.67-4.16 395.83-125 612.5-545.84 487.5-941.67-75-237.5-258.34-416.67-487.5-491.67z" fill="#fff"/></svg>`,
         usdt: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 339.43 295.27"><title>tether-usdt-logo</title><path d="M62.15,1.45l-61.89,130a2.52,2.52,0,0,0,.54,2.94L167.95,294.56a2.55,2.55,0,0,0,3.53,0L338.63,134.4a2.52,2.52,0,0,0,.54-2.94l-61.89-130A2.5,2.5,0,0,0,275,0H64.45a2.5,2.5,0,0,0-2.3,1.45h0Z" style="fill:#50af95;fill-rule:evenodd"/><path d="M191.19,144.8v0c-1.2.09-7.4,0.46-21.23,0.46-11,0-18.81-.33-21.55-0.46v0c-42.51-1.87-74.24-9.27-74.24-18.13s31.73-16.25,74.24-18.15v28.91c2.78,0.2,10.74.67,21.74,0.67,13.2,0,19.81-.55,21-0.66v-28.9c42.42,1.89,74.08,9.29,74.08,18.13s-31.65,16.24-74.08,18.12h0Zm0-39.25V79.68h59.2V40.23H89.21V79.68H148.4v25.86c-48.11,2.21-84.29,11.74-84.29,23.16s36.18,20.94,84.29,23.16v82.9h42.78V151.83c48-2.21,84.12-11.73,84.12-23.14s-36.09-20.93-84.12-23.15h0Zm0,0h0Z" style="fill:#fff;fill-rule:evenodd"/><script xmlns=""/></svg>`,
       };
@@ -1072,7 +1072,11 @@
                             .closest(".contact")
                             .querySelector("sm-copy").value = e.target.value)}
                       >
-                        <sm-chip value=${floAddress} selected>${floAddress.startsWith("F")?"FLO":"BTC"}</sm-chip>
+                        <sm-chip value=${floAddress} selected
+                          >${floAddress.startsWith("F")
+                            ? "FLO"
+                            : "BTC"}</sm-chip
+                        >
                         <sm-chip value=${BSCAddress}>BSC</sm-chip>
                       </sm-chips>
                     `}
@@ -1158,7 +1162,9 @@
                 ${floAddress && floAddress !== BSCAddress
                   ? html`
                       <div class="grid">
-                        <div class="label">${floAddress.startsWith("F")?"FLO":"BTC"} address</div>
+                        <div class="label">
+                          ${floAddress.startsWith("F") ? "FLO" : "BTC"} address
+                        </div>
                         <sm-copy
                           id="flo_address"
                           value="${floAddress}"
@@ -1414,9 +1420,9 @@
                                           id="Combined-Shape"
                                           class="st1"
                                           d="M456.3,320.8l34.8,34.7L396.5,450L302,355.5l34.8-34.7l59.7,59.7L456.3,320.8z
-							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
-							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
-							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"
+      							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
+      							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
+      							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"
                                         />
                                       </g>
                                     </g>
@@ -1819,13 +1825,28 @@
           let bscPrivateKey = getRef("retrieve_btc_addr_field").value.trim();
           getRef("recovered_btc_addr_wrapper").classList.remove("hidden");
           getRef("recovered_btc_addr").value =
-            floEthereum.ethAddressFromPrivateKey(bscPrivateKey);
+          bscPrivateKey.startsWith("R") ||
+          bscPrivateKey.startsWith("L") ||
+          bscPrivateKey.startsWith("K")
+              ? floEthereum.ethAddressFromPrivateKey(
+                  coinjs.wif2privkey(bscPrivateKey).privkey
+                )
+              : floEthereum.ethAddressFromPrivateKey(bscPrivateKey);
         }
         if (document.startViewTransition) {
           document.startViewTransition(() => {
             retrieve();
           });
         } else retrieve();
+      }
+      function wif2SolanaAddress(wif) {
+        var k1, k2, k3, k4, k5;
+        k1 = coinjs.wif2privkey(wif);
+        k2 = Crypto.util.hexToBytes(k1.privkey);
+        k3 = Uint8Array.from(k2);
+        k4 = solanaWeb3.Keypair.fromSeed(k3);
+        k5 = k4.publicKey.toString();
+        return k5;
       }
     </script>
   </body>
