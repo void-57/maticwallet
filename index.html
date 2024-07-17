@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Binance Smart Chain</title>
+    <title>Matic Wallet</title>
     <link rel="stylesheet" href="css/main.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +34,7 @@
           </svg>
           <div class="app-name">
             <div class="app-name__company">RanchiMall</div>
-            <h4 class="app-name__title">Binance Smart Chain</h4>
+            <h4 class="app-name__title">Matic Wallet</h4>
           </div>
         </div>
         <button
@@ -252,21 +252,21 @@
       </header>
       <section class="grid gap-1-5">
         <div class="grid gap-0-5">
-          <h4>Did you forget your Binance Address?</h4>
+          <h4>Did you forget your Matic Address?</h4>
           <p>
-            If you have your BSC/BTC/FLO Private Key, enter it here and recover your
-            Binance Address.
+            If you have your MATIC/BTC/FLO Private Key, enter it here and recover your
+            Matic Address.
           </p>
         </div>
         <sm-form>
           <div id="recovered_btc_addr_wrapper" class="hidden">
-            <h5>Recovered Binance Address</h5>
+            <h5>Recovered Matic Address</h5>
             <sm-copy id="recovered_btc_addr"></sm-copy>
           </div>
           <sm-input
             id="retrieve_btc_addr_field"
             type="password"
-            placeholder="BSC/BTC/FLO Private Key"
+            placeholder="MATIC/BTC/FLO Private Key"
             class="password-field"
             data-private-key
             required
@@ -316,7 +316,7 @@
           <button
             class="button button--primary cta"
             type="submit"
-            onclick="retrieveBinanceAddr()"
+            onclick="retrieveMaticAddr()"
           >
             Recover
           </button>
@@ -347,7 +347,7 @@
       src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js"
       type="text/javascript"
     ></script>
-    <script src="scripts/bscOperator.js" type="text/javascript"></script>
+    <script src="scripts/maticOperator.js" type="text/javascript"></script>
     <script>
       const uiGlobals = {};
       const { html, svg, render: renderElem } = uhtml;
@@ -631,45 +631,22 @@
     </script>
     <script>
       const assetIcons = {
-        Binance: `<svg hight="34" width="34" version="1.0" id="katman_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-      	 viewBox="0 0 800 600" style="enable-background:new 0 0 800 600;" xml:space="preserve">
-      <style type="text/css">
-      	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#F3BA2F;}
-      	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#131415;}
-      </style>
-      <g id="Light">
-      	<g id="OneArt-_x2022_-Desktop-_x2022_-Light" transform="translate(-457.000000, -1515.000000)">
-      		<g id="Block" transform="translate(41.000000, 1263.000000)">
-      			<g id="TVL" transform="translate(48.000000, 252.000000)">
-      				<g id="Icons_x2F_Icon-24_x2F_cake" transform="translate(368.000000, 0.000000)">
-      					<circle id="Oval" class="st0" cx="399.8" cy="299.6" r="230.7"/>
-      					<g id="Icons_x2F_icon-24_x2F_networks_x2F_binance_x5F_smart_x5F_chain" transform="translate(3.333333, 3.333333)">
-      						<path id="Combined-Shape" class="st1" d="M456.3,320.8l34.8,34.7L396.5,450L302,355.5l34.8-34.7l59.7,59.7L456.3,320.8z
-      							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
-      							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
-      							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"/>
-      					</g>
-      				</g>
-      			</g>
-      		</g>
-      	</g>
-      </g>
-      </svg>`,
+        Matic: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 1024 1024" id="polygon-token"><circle cx="512" cy="512" r="512" fill="#8247E5"></circle><path fill="#fff" d="M681.469 402.456C669.189 395.312 653.224 395.312 639.716 402.456L543.928 457.228L478.842 492.949L383.055 547.721C370.774 554.865 354.81 554.865 341.301 547.721L265.162 504.856C252.882 497.712 244.286 484.614 244.286 470.325V385.786C244.286 371.498 251.654 358.4 265.162 351.256L340.073 309.581C352.353 302.437 368.318 302.437 381.827 309.581L456.737 351.256C469.018 358.4 477.614 371.498 477.614 385.786V440.558L542.7 403.646V348.874C542.7 334.586 535.332 321.488 521.824 314.344L383.055 235.758C370.774 228.614 354.81 228.614 341.301 235.758L200.076 314.344C186.567 321.488 179.199 334.586 179.199 348.874V507.237C179.199 521.525 186.567 534.623 200.076 541.767L341.301 620.353C353.582 627.498 369.546 627.498 383.055 620.353L478.842 566.772L543.928 529.86L639.716 476.279C651.996 469.135 667.961 469.135 681.469 476.279L756.38 517.953C768.66 525.098 777.257 538.195 777.257 552.484V637.023C777.257 651.312 769.888 664.409 756.38 671.553L681.469 714.419C669.189 721.563 653.224 721.563 639.716 714.419L564.805 672.744C552.525 665.6 543.928 652.502 543.928 638.214V583.442L478.842 620.353V675.125C478.842 689.414 486.21 702.512 499.719 709.656L640.944 788.242C653.224 795.386 669.189 795.386 682.697 788.242L823.922 709.656C836.203 702.512 844.799 689.414 844.799 675.125V516.763C844.799 502.474 837.431 489.377 823.922 482.232L681.469 402.456Z"></path></svg>`,
         usdc: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" data-name="86977684-12db-4850-8f30-233a7c267d11" viewBox="0 0 2000 2000"> <path d="M1000 2000c554.17 0 1000-445.83 1000-1000S1554.17 0 1000 0 0 445.83 0 1000s445.83 1000 1000 1000z" fill="#2775ca"/> <path d="M1275 1158.33c0-145.83-87.5-195.83-262.5-216.66-125-16.67-150-50-150-108.34s41.67-95.83 125-95.83c75 0 116.67 25 137.5 87.5 4.17 12.5 16.67 20.83 29.17 20.83h66.66c16.67 0 29.17-12.5 29.17-29.16v-4.17c-16.67-91.67-91.67-162.5-187.5-170.83v-100c0-16.67-12.5-29.17-33.33-33.34h-62.5c-16.67 0-29.17 12.5-33.34 33.34v95.83c-125 16.67-204.16 100-204.16 204.17 0 137.5 83.33 191.66 258.33 212.5 116.67 20.83 154.17 45.83 154.17 112.5s-58.34 112.5-137.5 112.5c-108.34 0-145.84-45.84-158.34-108.34-4.16-16.66-16.66-25-29.16-25h-70.84c-16.66 0-29.16 12.5-29.16 29.17v4.17c16.66 104.16 83.33 179.16 220.83 200v100c0 16.66 12.5 29.16 33.33 33.33h62.5c16.67 0 29.17-12.5 33.34-33.33v-100c125-20.84 208.33-108.34 208.33-220.84z" fill="#fff"/> <path d="M787.5 1595.83c-325-116.66-491.67-479.16-370.83-800 62.5-175 200-308.33 370.83-370.83 16.67-8.33 25-20.83 25-41.67V325c0-16.67-8.33-29.17-25-33.33-4.17 0-12.5 0-16.67 4.16-395.83 125-612.5 545.84-487.5 941.67 75 233.33 254.17 412.5 487.5 487.5 16.67 8.33 33.34 0 37.5-16.67 4.17-4.16 4.17-8.33 4.17-16.66v-58.34c0-12.5-12.5-29.16-25-37.5zM1229.17 295.83c-16.67-8.33-33.34 0-37.5 16.67-4.17 4.17-4.17 8.33-4.17 16.67v58.33c0 16.67 12.5 33.33 25 41.67 325 116.66 491.67 479.16 370.83 800-62.5 175-200 308.33-370.83 370.83-16.67 8.33-25 20.83-25 41.67V1700c0 16.67 8.33 29.17 25 33.33 4.17 0 12.5 0 16.67-4.16 395.83-125 612.5-545.84 487.5-941.67-75-237.5-258.34-416.67-487.5-491.67z" fill="#fff"/></svg>`,
         usdt: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 339.43 295.27"><title>tether-usdt-logo</title><path d="M62.15,1.45l-61.89,130a2.52,2.52,0,0,0,.54,2.94L167.95,294.56a2.55,2.55,0,0,0,3.53,0L338.63,134.4a2.52,2.52,0,0,0,.54-2.94l-61.89-130A2.5,2.5,0,0,0,275,0H64.45a2.5,2.5,0,0,0-2.3,1.45h0Z" style="fill:#50af95;fill-rule:evenodd"/><path d="M191.19,144.8v0c-1.2.09-7.4,0.46-21.23,0.46-11,0-18.81-.33-21.55-0.46v0c-42.51-1.87-74.24-9.27-74.24-18.13s31.73-16.25,74.24-18.15v28.91c2.78,0.2,10.74.67,21.74,0.67,13.2,0,19.81-.55,21-0.66v-28.9c42.42,1.89,74.08,9.29,74.08,18.13s-31.65,16.24-74.08,18.12h0Zm0-39.25V79.68h59.2V40.23H89.21V79.68H148.4v25.86c-48.11,2.21-84.29,11.74-84.29,23.16s36.18,20.94,84.29,23.16v82.9h42.78V151.83c48-2.21,84.12-11.73,84.12-23.14s-36.09-20.93-84.12-23.15h0Zm0,0h0Z" style="fill:#fff;fill-rule:evenodd"/><script xmlns=""/></svg>`,
       };
       window.smCompConfig = {
         "sm-input": [
           {
-            selector: "[data-BSC-address]",
+            selector: "[data-MATIC-address]",
             customValidation: (value) => {
               if (!value)
                 return {
                   isValid: false,
-                  errorText: "Please enter a Binance address",
+                  errorText: "Please enter a Matic address",
                 };
               return {
-                isValid: bscOperator.isValidAddress(value),
+                isValid: MATICOperator.isValidAddress(value),
                 errorText: `Invalid address.<br> It usually starts with "0x"`,
               };
             },
@@ -694,13 +671,13 @@
               if (!value)
                 return {
                   isValid: false,
-                  errorText: "Please enter a private key or BSC address",
+                  errorText: "Please enter a private key or Matic address",
                 };
               return {
                 isValid:
                   floCrypto.getPubKeyHex(value) ||
-                  bscOperator.isValidAddress(value),
-                errorText: `Invalid private key or BSC address"`,
+                  maticOperator.isValidAddress(value),
+                errorText: `Invalid private key or Matic address"`,
               };
             },
           },
@@ -754,7 +731,7 @@
           }
         });
         compactIDB
-          .initDB("floBinance", {
+          .initDB("floMatic", {
             contacts: {},
           })
           .then((result) => {
@@ -769,7 +746,7 @@
           window.ethereum.on("chainChanged", (chainId) => {
             window.currentChainId = chainId;
             if (chainId !== "0x1") {
-              renderError("Please switch MetaMask to Binance Mainnet");
+              renderError("Please switch MetaMask to Matic Mainnet");
             } else {
               router.routeTo(location.hash);
             }
@@ -782,7 +759,7 @@
               window.currentChainId = chainId;
               if (chainId !== "0x38") {
                 renderError(
-                  "Please switch MetaMask to Binance Smart Chain Mainnet"
+                  "Please switch MetaMask to Matic Wallet Mainnet"
                 );
               } else {
                 router.routeTo(location.hash);
@@ -809,7 +786,7 @@
         // })
         if (typeof window.ethereum !== "undefined") {
           ethereum.on("accountsChanged", (accounts) => {
-            getRef("bsc_balance_wrapper").classList.add("hidden");
+            getRef("matic_balance_wrapper").classList.add("hidden");
             setMetaMaskStatus(accounts.length > 0);
           });
           ethereum.on("connect", (accounts) => {
@@ -838,13 +815,13 @@
               <ul id="searched_addresses_list" class="grid gap-0-5"></ul>
             </aside>
             <section id="balance_section" class="grid gap-1-5">
-              <h2>Check Binance, USDC and USDT balance</h2>
+              <h2>Check Matic, USDC and USDT balance</h2>
               <sm-form oninvalid="handleInvalidSearch()">
                 <div id="input_wrapper">
                   <sm-input
                     id="check_balance_input"
                     class="password-field flex-1"
-                    placeholder="FLO/BTC private key or BSC address"
+                    placeholder="FLO/BTC private key or Matic address"
                     type="password"
                     animate
                     required
@@ -920,7 +897,7 @@
                   </div>
                 </div>
               </sm-form>
-              <div id="bsc_balance_wrapper" class="grid gap-2 hidden"></div>
+              <div id="matic_balance_wrapper" class="grid gap-2 hidden"></div>
             </section>
           `
         );
@@ -928,7 +905,7 @@
           window.ethereum &&
           !(window.currentChainId && window.currentChainId === "0x1")
         ) {
-          renderError("Please switch MetaMask to Binance Mainnet");
+          renderError("Please switch MetaMask to Matic Mainnet");
         }
         renderSearchedAddressList();
       }
@@ -1061,12 +1038,12 @@
             }
             const renderedContacts = [];
             for (const floAddress in contacts) {
-              const { BSCAddress } = contacts[floAddress];
+              const { maticAddress } = contacts[floAddress];
               renderedContacts.push(html` <li
                 class="contact"
-                .dataset=${{ floAddress, BSCAddress }}
+                .dataset=${{ floAddress, maticAddress }}
               >
-                ${floAddress === BSCAddress
+                ${floAddress === maticAddress
                   ? html``
                   : html`
                       <sm-chips
@@ -1080,7 +1057,7 @@
                             ? "FLO"
                             : "BTC"}</sm-chip
                         >
-                        <sm-chip value=${BSCAddress}>BSC</sm-chip>
+                        <sm-chip value=${maticAddress}>Matic</sm-chip>
                       </sm-chips>
                     `}
                 <sm-copy value="${floAddress}"></sm-copy>
@@ -1093,7 +1070,7 @@
                   </button>
                   <button
                     class="button button--colored button--small"
-                    onclick=${() => checkBalance(BSCAddress, floAddress)}
+                    onclick=${() => checkBalance(maticAddress, floAddress)}
                   >
                     Check balance
                   </button>
@@ -1109,44 +1086,44 @@
             console.error(error);
           });
       }
-      function checkBalance(BSCAddress, floAddress) {
-        if (!BSCAddress) {
+      function checkBalance(maticAddress, floAddress) {
+        if (!maticAddress) {
           const keyToConvert = document
             .querySelector("#check_balance_input")
             .value.trim();
-          if (bscOperator.isValidAddress(keyToConvert)) {
-            BSCAddress = keyToConvert;
+          if (maticOperator.isValidAddress(keyToConvert)) {
+            maticAddress = keyToConvert;
           } else {
             if (/^[0-9a-fA-F]{64}$/.test(keyToConvert)) {
               keyToConvert = coinjs.privkey2wif(keyToConvert);
             }
             console.log("lkkkk", keyToConvert);
             const ethPrivateKey = coinjs.wif2privkey(keyToConvert).privkey;
-            BSCAddress = floEthereum.ethAddressFromPrivateKey(ethPrivateKey);
+            maticAddress = floEthereum.ethAddressFromPrivateKey(ethPrivateKey);
             floAddress = keyToConvert.startsWith("R")
               ? floCrypto.getFloID(keyToConvert)
               : btcOperator.bech32Address(keyToConvert);
           }
         }
-        if (!BSCAddress) return;
+        if (!maticAddress) return;
         buttonLoader("check_balance_button", true);
         Promise.all([
-          bscOperator.getBalance(BSCAddress),
-          bscOperator.getTokenBalance(BSCAddress, "usdc"),
-          bscOperator.getTokenBalance(BSCAddress, "usdt"),
+          maticOperator.getBalance(maticAddress),
+          maticOperator.getTokenBalance(maticAddress, "usdc"),
+          maticOperator.getTokenBalance(maticAddress, "usdt"),
         ])
-          .then(([BinanceBalance, usdcBalance, usdtBalance]) => {
+          .then(([MaticBalance, usdcBalance, usdtBalance]) => {
             compactIDB
-              .readData("contacts", floAddress || BSCAddress)
+              .readData("contacts", floAddress || maticAddress)
               .then((result) => {
                 if (result) return;
                 compactIDB
                   .addData(
                     "contacts",
                     {
-                      BSCAddress,
+                      maticAddress,
                     },
-                    floAddress || BSCAddress
+                    floAddress || maticAddress
                   )
                   .then(() => {
                     renderSearchedAddressList();
@@ -1156,13 +1133,13 @@
                   });
               });
             renderElem(
-              getRef("bsc_balance_wrapper"),
+              getRef("matic_balance_wrapper"),
               html`
                 <div class="grid">
-                  <div class="label">BSC address</div>
-                  <sm-copy id="BSC_address" value="${BSCAddress}"></sm-copy>
+                  <div class="label">Matic address</div>
+                  <sm-copy id="matic_address" value="${maticAddress}"></sm-copy>
                 </div>
-                ${floAddress && floAddress !== BSCAddress
+                ${floAddress && floAddress !== maticAddress
                   ? html`
                       <div class="grid">
                         <div class="label">
@@ -1182,8 +1159,8 @@
                     class="flex flex-direction-column gap-0-5"
                   >
                     <li class="flex align-center space-between">
-                      <p>Binance</p>
-                      <b id="Binance_balance">${BinanceBalance} BSC</b>
+                      <p>Matic</p>
+                      <b id="Matic_balance">${MaticBalance} Matic</b>
                     </li>
                     <li class="flex align-center space-between">
                       <p>USDC</p>
@@ -1197,8 +1174,8 @@
                 </div>
               `
             );
-            getRef("bsc_balance_wrapper").classList.remove("hidden");
-            getRef("bsc_balance_wrapper").animate(
+            getRef("matic_balance_wrapper").classList.remove("hidden");
+            getRef("matic_balance_wrapper").animate(
               [
                 {
                   transform: "translateY(-1rem)",
@@ -1226,10 +1203,10 @@
       function handleInvalidSearch() {
         if (document.startViewTransition)
           document.startViewTransition(() => {
-            getRef("bsc_balance_wrapper").classList.add("hidden");
+            getRef("matic_balance_wrapper").classList.add("hidden");
           });
         else {
-          getRef("bsc_balance_wrapper").classList.add("hidden");
+          getRef("matic_balance_wrapper").classList.add("hidden");
         }
       }
       async function deleteContact(floAddress) {
@@ -1258,7 +1235,7 @@
                   <div class="flex flex-direction-column gap-0-5">
                     <h4>Sender</h4>
                     <p>
-                      Amount will be deducted from equivalent Binance address
+                      Amount will be deducted from equivalent Matic address
                     </p>
                   </div>
                   <button
@@ -1272,7 +1249,7 @@
                 </div>
                 <sm-input
                   id="private_key_input"
-                  placeholder="Sender's FLO/BTC/BSC private key"
+                  placeholder="Sender's FLO/BTC/Matic private key"
                   oninput=${handleSenderInput}
                   data-private-key
                   class="password-field"
@@ -1349,8 +1326,8 @@
                   <div class="grid gap-0-5">
                     <sm-input
                       class="receiver-address"
-                      placeholder="Receiver's Binance address"
-                      data-BSC-address
+                      placeholder="Receiver's Matic address"
+                      data-MATIC-address
                       animate
                       required
                     ></sm-input>
@@ -1361,86 +1338,19 @@
                         type="number"
                         step="0.000001"
                         min="0.000001"
-                        error-text="Amount should be grater than 0.000001 Binance"
+                        error-text="Amount should be grater than 0.000001 Matic"
                         animate
                         required
                       >
                         <div class="asset-symbol flex" slot="icon">
-                          <svg
-                            hight="34"
-                            width="34"
-                            version="1.0"
-                            id="katman_1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            x="0px"
-                            y="0px"
-                            viewBox="0 0 800 600"
-                            style="enable-background:new 0 0 800 600;"
-                            xml:space="preserve"
-                          >
-                            <style type="text/css">
-                              .st0 {
-                                fill-rule: evenodd;
-                                clip-rule: evenodd;
-                                fill: #f3ba2f;
-                              }
-                              .st1 {
-                                fill-rule: evenodd;
-                                clip-rule: evenodd;
-                                fill: #131415;
-                              }
-                            </style>
-                            <g id="Light">
-                              <g
-                                id="OneArt-_x2022_-Desktop-_x2022_-Light"
-                                transform="translate(-457.000000, -1515.000000)"
-                              >
-                                <g
-                                  id="Block"
-                                  transform="translate(41.000000, 1263.000000)"
-                                >
-                                  <g
-                                    id="TVL"
-                                    transform="translate(48.000000, 252.000000)"
-                                  >
-                                    <g
-                                      id="Icons_x2F_Icon-24_x2F_cake"
-                                      transform="translate(368.000000, 0.000000)"
-                                    >
-                                      <circle
-                                        id="Oval"
-                                        class="st0"
-                                        cx="399.8"
-                                        cy="299.6"
-                                        r="230.7"
-                                      />
-                                      <g
-                                        id="Icons_x2F_icon-24_x2F_networks_x2F_binance_x5F_smart_x5F_chain"
-                                        transform="translate(3.333333, 3.333333)"
-                                      >
-                                        <path
-                                          id="Combined-Shape"
-                                          class="st1"
-                                          d="M456.3,320.8l34.8,34.7L396.5,450L302,355.5l34.8-34.7l59.7,59.7L456.3,320.8z
-      							 M396.5,261l35.3,35.3h0l0,0l-35.3,35.3l-35.2-35.2l0-0.1l0,0l6.2-6.2l3-3L396.5,261z M277.5,261.5l34.8,34.8L277.5,331
-      							l-34.8-34.8L277.5,261.5z M515.5,261.5l34.8,34.8L515.5,331l-34.8-34.8L515.5,261.5z M396.5,142.5L491,237l-34.8,34.8
-      							L396.5,212l-59.7,59.7L302,237L396.5,142.5z"
-                                        />
-                                      </g>
-                                    </g>
-                                  </g>
-                                </g>
-                              </g>
-                            </g>
-                          </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 1024 1024" id="polygon-token"><circle cx="512" cy="512" r="512" fill="#8247E5"></circle><path fill="#fff" d="M681.469 402.456C669.189 395.312 653.224 395.312 639.716 402.456L543.928 457.228L478.842 492.949L383.055 547.721C370.774 554.865 354.81 554.865 341.301 547.721L265.162 504.856C252.882 497.712 244.286 484.614 244.286 470.325V385.786C244.286 371.498 251.654 358.4 265.162 351.256L340.073 309.581C352.353 302.437 368.318 302.437 381.827 309.581L456.737 351.256C469.018 358.4 477.614 371.498 477.614 385.786V440.558L542.7 403.646V348.874C542.7 334.586 535.332 321.488 521.824 314.344L383.055 235.758C370.774 228.614 354.81 228.614 341.301 235.758L200.076 314.344C186.567 321.488 179.199 334.586 179.199 348.874V507.237C179.199 521.525 186.567 534.623 200.076 541.767L341.301 620.353C353.582 627.498 369.546 627.498 383.055 620.353L478.842 566.772L543.928 529.86L639.716 476.279C651.996 469.135 667.961 469.135 681.469 476.279L756.38 517.953C768.66 525.098 777.257 538.195 777.257 552.484V637.023C777.257 651.312 769.888 664.409 756.38 671.553L681.469 714.419C669.189 721.563 653.224 721.563 639.716 714.419L564.805 672.744C552.525 665.6 543.928 652.502 543.928 638.214V583.442L478.842 620.353V675.125C478.842 689.414 486.21 702.512 499.719 709.656L640.944 788.242C653.224 795.386 669.189 795.386 682.697 788.242L823.922 709.656C836.203 702.512 844.799 689.414 844.799 675.125V516.763C844.799 502.474 837.431 489.377 823.922 482.232L681.469 402.456Z"></path></svg>
                         </div>
                       </sm-input>
                       <sm-chips
                         id="asset_selector"
                         onchange=${handleAssetChange}
                       >
-                        <sm-chip value="Binance" selected>Binance</sm-chip>
+                        <sm-chip value="Matic" selected>Matic</sm-chip>
                         <sm-chip value="usdc">USDC</sm-chip>
                         <sm-chip value="usdt">USDT</sm-chip>
                       </sm-chips>
@@ -1455,7 +1365,7 @@
                     disabled
                     onclick="sendTx()"
                   >
-                    Send Binance
+                    Send Matic
                   </button>
                 </div>
               </fieldset>
@@ -1466,7 +1376,7 @@
           window.ethereum &&
           !(window.currentChainId && window.currentChainId === "0x1")
         ) {
-          renderError("Please switch MetaMask to Binance Mainnet");
+          renderError("Please switch MetaMask to Matic Mainnet");
         }
       });
       function togglePrivateKeyVisibility(input) {
@@ -1495,10 +1405,10 @@
           getRef("sender_balance_container"),
           html` Loading balance...<sm-spinner></sm-spinner> `
         );
-        const promises = [bscOperator.getBalance(address)];
+        const promises = [maticOperator.getBalance(address)];
         const selectedAsset = getRef("asset_selector").value;
-        if (selectedAsset !== "Binance")
-          promises.push(bscOperator.getTokenBalance(address, selectedAsset));
+        if (selectedAsset !== "Matic")
+          promises.push(maticOperator.getTokenBalance(address, selectedAsset));
         Promise.all(promises)
           .then(([ethBalance, tokenBalance]) => {
             renderElem(
@@ -1517,8 +1427,8 @@
                   </div>
                   <p>
                     Balance:
-                    <b class="amount-shown">${ethBalance} BSC</b>
-                    ${selectedAsset !== "Binance"
+                    <b class="amount-shown">${ethBalance} Matic</b>
+                    ${selectedAsset !== "Matic"
                       ? html`|
                           <b class="amount-shown"
                             >${tokenBalance} ${selectedAsset.toUpperCase()}</b
@@ -1574,8 +1484,8 @@
           }
           privateKey = coinjs.wif2privkey(privateKey).privkey;
           switch (asset) {
-            case "Binance": {
-              const tx = await bscOperator.sendTransaction({
+            case "Matic": {
+              const tx = await maticOperator.sendTransaction({
                 privateKey,
                 receiver,
                 amount,
@@ -1587,7 +1497,7 @@
             }
             case "usdc":
             case "usdt": {
-              const tx = await bscOperator.sendToken({
+              const tx = await maticOperator.sendToken({
                 privateKey,
                 receiver,
                 amount,
@@ -1654,7 +1564,7 @@
                 <a
                   class="button button--primary"
                   target="_blank"
-                  href=${`https://bscscan.com/tx/${txHash}`}
+                  href=${`https://polygonscan.com/tx/${txHash}`}
                   >Check transaction status</a
                 >
               `
@@ -1688,7 +1598,7 @@
                 <a
                   class="button button--primary"
                   target="_blank"
-                  href=${`https://bscscan.com/tx/${txHash}`}
+                  href=${`https://polygonscan.com/tx/${txHash}`}
                   >Check transaction status</a
                 >
               `
@@ -1726,7 +1636,7 @@
           getRef("page_container"),
           html`
             <div class="grid gap-1">
-              <h2>Don't have an Binance address? Create one</h2>
+              <h2>Don't have an Matic address? Create one</h2>
               <section class="create-buttons">
                 <button
                   class="button button--primary interactive gap-0-5 margin-right-auto"
@@ -1752,7 +1662,7 @@
                       </g>
                     </g>
                   </svg>
-                  Generate BSC address
+                  Generate Matic address
                 </button>
                 <button
                   class="button button--primary interactive gap-0-5 margin-right-auto"
@@ -1771,7 +1681,7 @@
                       d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-2-9c-4.97 0-9 4.03-9 9H0l4 4 4-4H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"
                     />
                   </svg>
-                  Retrieve BSC address
+                  Retrieve Matic address
                 </button>
               </section>
             </div>
@@ -1782,7 +1692,7 @@
       function generateNewID() {
         const { floID, privKey } = floCrypto.generateNewID();
         const ethPrivateKey = coinjs.wif2privkey(privKey).privkey;
-        const BSCAddress = floEthereum.ethAddressFromPrivateKey(ethPrivateKey);
+        const maticAddress = floEthereum.ethAddressFromPrivateKey(ethPrivateKey);
         const btcPrivKey = btcOperator.convert.wif(privKey);
         const btcAddr = btcOperator.bech32Address(btcPrivKey);
         renderElem(
@@ -1791,8 +1701,8 @@
             <ul id="generated_addresses" class="grid gap-1-5">
               <li class="grid gap-0-5">
                 <div>
-                  <h5>Binance Address</h5>
-                  <sm-copy value="${BSCAddress}"></sm-copy>
+                  <h5>Matic Address</h5>
+                  <sm-copy value="${maticAddress}"></sm-copy>
                 </div>
                 <div>
                   <h5>Private Key</h5>
@@ -1823,18 +1733,18 @@
           `
         );
       }
-      function retrieveBinanceAddr() {
+      function retrieveMaticAddr() {
         function retrieve() {
-          let bscPrivateKey = getRef("retrieve_btc_addr_field").value.trim();
+          let maticPrivateKey = getRef("retrieve_btc_addr_field").value.trim();
           getRef("recovered_btc_addr_wrapper").classList.remove("hidden");
           getRef("recovered_btc_addr").value =
-          bscPrivateKey.startsWith("R") ||
-          bscPrivateKey.startsWith("L") ||
-          bscPrivateKey.startsWith("K")
+          maticPrivateKey.startsWith("R") ||
+          maticPrivateKey.startsWith("L") ||
+          maticPrivateKey.startsWith("K")
               ? floEthereum.ethAddressFromPrivateKey(
-                  coinjs.wif2privkey(bscPrivateKey).privkey
+                  coinjs.wif2privkey(maticPrivateKey).privkey
                 )
-              : floEthereum.ethAddressFromPrivateKey(bscPrivateKey);
+              : floEthereum.ethAddressFromPrivateKey(maticPrivateKey);
         }
         if (document.startViewTransition) {
           document.startViewTransition(() => {

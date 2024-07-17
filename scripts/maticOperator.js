@@ -1,9 +1,9 @@
-(function (EXPORTS) { //bscOperator v1.0.2
+(function (EXPORTS) { //maticOperator v1.0.2
   /* ETH Crypto and API Operator */
   if (!window.ethers)
     return console.error('ethers.js not found')
-  const bscOperator = EXPORTS;
-  const isValidAddress = bscOperator.isValidAddress = (address) => {
+  const maticOperator = EXPORTS;
+  const isValidAddress = maticOperator.isValidAddress = (address) => {
     try {
       // Check if the address is a valid checksum address
       const isValidChecksum = ethers.utils.isAddress(address);
@@ -237,23 +237,40 @@
     }
   ]
   const CONTRACT_ADDRESSES = {
-    usdc: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
-    usdt: "0x55d398326f99059ff775485246999027b3197955"
-  }
+    usdc: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+    usdt: "0x3813e82e6f7098b9583FC0F33a962D02018B6803"
+  };
+  
   function getProvider() {
-    // switches provider based on whether the user is using MetaMask or not
-    const bscMainnet = {
-      chainId: 56,
-      name: 'binance',
-      rpc: 'https://bsc-dataseed.binance.org/',
-      explorer: 'https://bscscan.com'
+    // Configuration for the Polygon (Matic) network
+    const maticMainnet = {
+      chainId: 137, // Hexadecimal representation of 137
+      name: 'matic',
+      rpc: 'https://rpc-mainnet.maticvigil.com/', // RPC URL for Polygon (Matic)
+      explorer: 'https://polygonscan.com'
     };
+    
     if (window.ethereum) {
-      return new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      
+      // Optional: Switch network to Matic if not already connected
+      provider.send("wallet_addEthereumChain", [{
+        chainId: maticMainnet.chainId,
+        chainName: maticMainnet.name,
+        rpcUrls: [maticMainnet.rpc],
+        blockExplorerUrls: [maticMainnet.explorer],
+        nativeCurrency: {
+          name: "MATIC",
+          symbol: "MATIC",
+          decimals: 18
+        }
+      }]).catch(console.error);
+      
+      return provider;
     } else {
-      return new ethers.providers.JsonRpcProvider(bscMainnet.rpc, bscMainnet)
+      return new ethers.providers.JsonRpcProvider(maticMainnet.rpc, maticMainnet);
     }
-  }
+  }  
   function connectToMetaMask() {
     return new Promise((resolve, reject) => {
       // if (typeof window.ethereum === "undefined")
@@ -272,7 +289,7 @@
     })
   }
   // connectToMetaMask();
-  const getBalance = bscOperator.getBalance = async (address) => {
+  const getBalance = maticOperator.getBalance = async (address) => {
     try {
       if (!address || !isValidAddress(address))
         return new Error('Invalid address');
@@ -286,7 +303,7 @@
       return error;
     }
   }
-  const getTokenBalance = bscOperator.getTokenBalance = async (address, token, { contractAddress } = {}) => {
+  const getTokenBalance = maticOperator.getTokenBalance = async (address, token, { contractAddress } = {}) => {
     try {
       if (!address) {
         throw new Error("Address not specified");
@@ -298,7 +315,7 @@
         throw new Error("Contract address of token not available");
       }
   
-      const provider = getProvider(); // Ensure this returns a valid provider for BSC
+      const provider = getProvider(); // Ensure this returns a valid provider for matic
       const contract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, provider);
       
       let balance = await contract.balanceOf(address);
@@ -317,7 +334,7 @@
     }
   }
 
-  const estimateGas = bscOperator.estimateGas = async ({ privateKey, receiver, amount }) => {
+  const estimateGas = maticOperator.estimateGas = async ({ privateKey, receiver, amount }) => {
     try {
       const provider = getProvider();
       const signer = new ethers.Wallet(privateKey, provider);
@@ -331,7 +348,7 @@
     }
   }
 
-  const sendTransaction = bscOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
+  const sendTransaction = maticOperator.sendTransaction = async ({ privateKey, receiver, amount }) => {
     try {
       const provider = getProvider();
       const signer = new ethers.Wallet(privateKey, provider);
@@ -349,7 +366,7 @@
     }
   }
 
-  const sendToken = bscOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
+  const sendToken = maticOperator.sendToken = async ({ token, privateKey, amount, receiver, contractAddress }) => {
     // Create a wallet using the private key
     const wallet = new ethers.Wallet(privateKey, getProvider());
     // Contract interface
@@ -360,4 +377,4 @@
     // Call the transfer function on the USDC contract
     return tokenContract.transfer(receiver, amountWei)
   }
-})('object' === typeof module ? module.exports : window.bscOperator = {});
+})('object' === typeof module ? module.exports : window.maticOperator = {});
