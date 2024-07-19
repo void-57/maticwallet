@@ -812,13 +812,13 @@ aside h4 {
   display: grid;
   gap: 0.5rem;
 }
-#bsc_balance_wrapper {
+#matic_balance_wrapper {
   background-color: rgba(var(--text-color), 0.06);
   padding: max(1rem, 1.5vw);
   border-radius: 0.5rem;
   width: 100%;
 }
-#bsc_balance_wrapper li:not(:last-of-type) {
+#matic_balance_wrapper li:not(:last-of-type) {
   border-bottom: solid thin rgba(var(--text-color), 0.3);
   padding-bottom: 0.5rem;
 }
