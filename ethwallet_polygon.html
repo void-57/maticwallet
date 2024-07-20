@@ -1531,6 +1531,9 @@
           getRef("sender_balance_container").classList.add("hidden");
         } catch (e) {
           console.error(e.message);
+          showTransactionResult("failed", {
+            description: `Insufficient ${asset.toUpperCase()} balance`,
+          });
           const regex = /\(error=({.*?}),/;
           const match = e.message.match(regex);
           if (match && match[1]) {
