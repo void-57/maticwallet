@@ -360,8 +360,10 @@
       BEP20ABI,
       wallet
     );
+
+    const decimals = await tokenContract.decimals();
     // Convert the amount to the smallest unit of USDC (wei)
-    const amountWei = ethers.utils.parseUnits(amount.toString(), 6); // Assuming 6 decimals for USDC
+    const amountWei = ethers.utils.parseUnits(amount.toString(), decimals); // Assuming 6 decimals for USDC
 
     // Call the transfer function on the USDC contract
     return tokenContract.transfer(receiver, amountWei);
