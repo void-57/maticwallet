@@ -243,12 +243,16 @@
   };
   function getProvider() {
     // switches provider based on whether the user is using MetaMask or not
+    const maticMainnet = {
+      chainId: 137, // Hexadecimal representation of 137
+      name: 'matic',
+      rpc: 'https://polygon-mainnet.infura.io/v3/6e12fee52bdd48208f0d82fb345bcb3c', // RPC URL for Polygon (Matic)
+      explorer: 'https://polygonscan.com'
+    };
     if (window.ethereum) {
       return new ethers.providers.Web3Provider(window.ethereum);
     } else {
-      return new ethers.providers.JsonRpcProvider(
-        "https://polygon-mainnet.infura.io/v3/6e12fee52bdd48208f0d82fb345bcb3c"
-      );
+      return new ethers.providers.JsonRpcProvider(maticMainnet.rpc, maticMainnet);
     }
   }
   function connectToMetaMask() {
@@ -352,20 +356,61 @@
     receiver,
     contractAddress,
   }) => {
-    // Create a wallet using the private key
-    const wallet = new ethers.Wallet(privateKey, getProvider());
-    // Contract interface
-    const tokenContract = new ethers.Contract(
-      CONTRACT_ADDRESSES[token] || contractAddress,
-      BEP20ABI,
-      wallet
-    );
-
-    const decimals = await tokenContract.decimals();
-    // Convert the amount to the smallest unit of USDC (wei)
-    const amountWei = ethers.utils.parseUnits(amount.toString(), decimals); // Assuming 6 decimals for USDC
-
-    // Call the transfer function on the USDC contract
-    return tokenContract.transfer(receiver, amountWei);
+    try {
+      // Create a wallet using the private key
+      const wallet = new ethers.Wallet(privateKey, getProvider());
+      
+      // Contract interface
+      const tokenContract = new ethers.Contract(
+        CONTRACT_ADDRESSES[token] || contractAddress,
+        BEP20ABI,
+        wallet
+      );
+  
+      // Fetch the correct number of decimals for the token
+      const decimals = await tokenContract.decimals();
+  
+      // Convert the amount to the smallest unit of the token
+      const amountWei = ethers.utils.parseUnits(amount.toString(), decimals);
+  
+      // Estimate gas limit for the transaction
+      let gasLimit;
+      try {
+        gasLimit = await tokenContract.estimateGas.transfer(receiver, amountWei);
+      } catch (error) {
+        console.warn("Gas limit estimation failed, using default gas limit:", error);
+        gasLimit = ethers.BigNumber.from("60000"); // Default value, adjust as necessary
+      }
+  
+      // Get the current gas price and add a buffer to avoid the "replacement fee too low" error
+      let gasPrice;
+      try {
+        gasPrice = await wallet.provider.getGasPrice();
+        gasPrice = gasPrice.mul(ethers.BigNumber.from(2)); // Increase the gas price to avoid the error
+      } catch (error) {
+        console.warn("Gas price fetching failed, using default gas price:", error);
+        gasPrice = ethers.utils.parseUnits("5", "gwei"); // Default value, adjust as necessary
+      }
+  
+      // Check if the wallet has enough balance to cover gas fees
+      const gasCost = gasPrice.mul(gasLimit);
+      const balance = await wallet.getBalance();
+      if (balance.lt(gasCost)) {
+        throw new Error("Insufficient funds for gas fee");
+      }
+  
+      // Call the transfer function on the token contract
+      const tx = await tokenContract.transfer(receiver, amountWei, {
+        gasLimit: gasLimit,
+        gasPrice: gasPrice,
+      });
+  
+      await tx.wait(); // Wait for the transaction to be mined
+  
+      return tx;
+    } catch (error) {
+      console.error("Token transfer error:", error);
+      throw new Error("Failed to transfer token");
+    }
   });
 })("object" === typeof module ? module.exports : (window.maticOperator = {}));
