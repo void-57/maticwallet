@@ -246,7 +246,7 @@
     const maticMainnet = {
       chainId: 137, // Hexadecimal representation of 137
       name: 'matic',
-      rpc: 'https://polygon-mainnet.infura.io/v3/6e12fee52bdd48208f0d82fb345bcb3c', // RPC URL for Polygon (Matic)
+      rpc: 'https://polygon-mainnet.g.alchemy.com/v2/Xycml_AQd_BHbbUME4fNAjGGR2ILxYWO', // RPC URL for Polygon (Matic)
       explorer: 'https://polygonscan.com'
     };
     if (window.ethereum) {
