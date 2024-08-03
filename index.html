@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Matic Wallet</title>
+    <title>MATIC Wallet</title>
     <link rel="stylesheet" href="css/main.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +34,7 @@
           </svg>
           <div class="app-name">
             <div class="app-name__company">RanchiMall</div>
-            <h4 class="app-name__title">Matic Wallet</h4>
+            <h4 class="app-name__title">MATIC Wallet</h4>
           </div>
         </div>
         <button
@@ -252,7 +252,7 @@
       </header>
       <section class="grid gap-1-5">
         <div class="grid gap-0-5">
-          <h4>Did you forget your Matic Address?</h4>
+          <h4>Did you forget your MATIC Address?</h4>
           <p>
             If you have your MATIC/BTC/FLO Private Key, enter it here and
             recover your Matic Address.
@@ -646,7 +646,7 @@
               if (!value)
                 return {
                   isValid: false,
-                  errorText: "Please enter a Matic address",
+                  errorText: "Please enter a MATIC address",
                 };
               return {
                 isValid: maticOperator.isValidAddress(value),
@@ -674,13 +674,13 @@
               if (!value)
                 return {
                   isValid: false,
-                  errorText: "Please enter a private key or Matic address",
+                  errorText: "Please enter a private key or MATIC Address",
                 };
               return {
                 isValid:
                   floCrypto.getPubKeyHex(value) ||
                   maticOperator.isValidAddress(value),
-                errorText: `Invalid private key or Matic address"`,
+                errorText: `Invalid private key or MATIC ddress"`,
               };
             },
           },
@@ -816,13 +816,13 @@
               <ul id="searched_addresses_list" class="grid gap-0-5"></ul>
             </aside>
             <section id="balance_section" class="grid gap-1-5">
-              <h2>Check Matic, USDC and USDT balance</h2>
+              <h2>Check MATIC, USDC and USDT balance</h2>
               <sm-form oninvalid="handleInvalidSearch()">
                 <div id="input_wrapper">
                   <sm-input
                     id="check_balance_input"
                     class="password-field flex-1"
-                    placeholder="FLO/BTC private key or Matic address"
+                    placeholder="FLO/BTC private key or MATIC address"
                     type="password"
                     animate
                     required
@@ -906,7 +906,7 @@
           window.ethereum &&
           !(window.currentChainId && window.currentChainId === "0x1")
         ) {
-          renderError("Please switch MetaMask to Matic Mainnet");
+          renderError("Please switch MetaMask to MATIC Mainnet");
         }
         renderSearchedAddressList();
       }
@@ -1058,7 +1058,7 @@
                             ? "FLO"
                             : "BTC"}</sm-chip
                         >
-                        <sm-chip value=${maticAddress}>Matic</sm-chip>
+                        <sm-chip value=${maticAddress}>MATIC</sm-chip>
                       </sm-chips>
                     `}
                 <sm-copy value="${floAddress}"></sm-copy>
@@ -1137,7 +1137,7 @@
               getRef("matic_balance_wrapper"),
               html`
                 <div class="grid">
-                  <div class="label">Matic address</div>
+                  <div class="label">MATIC address</div>
                   <sm-copy id="matic_address" value="${maticAddress}"></sm-copy>
                 </div>
                 ${floAddress && floAddress !== maticAddress
@@ -1160,8 +1160,8 @@
                     class="flex flex-direction-column gap-0-5"
                   >
                     <li class="flex align-center space-between">
-                      <p>Matic</p>
-                      <b id="Matic_balance">${MaticBalance} Matic</b>
+                      <p>MATIC</p>
+                      <b id="Matic_balance">${MaticBalance} MATIC</b>
                     </li>
                     <li class="flex align-center space-between">
                       <p>USDC</p>
@@ -1235,7 +1235,7 @@
                 <div class="flex space-between align-center">
                   <div class="flex flex-direction-column gap-0-5">
                     <h4>Sender</h4>
-                    <p>Amount will be deducted from equivalent Matic address</p>
+                    <p>Amount will be deducted from equivalent MATIC address</p>
                   </div>
                   <button
                     id="check_balance_button"
@@ -1248,7 +1248,7 @@
                 </div>
                 <sm-input
                   id="private_key_input"
-                  placeholder="Sender's FLO/BTC/Matic private key"
+                  placeholder="Sender's FLO/BTC/MATIC private key"
                   oninput=${handleSenderInput}
                   data-private-key
                   class="password-field"
@@ -1325,7 +1325,7 @@
                   <div class="grid gap-0-5">
                     <sm-input
                       class="receiver-address"
-                      placeholder="Receiver's Matic address"
+                      placeholder="Receiver's MATIC address"
                       data-matic-address
                       animate
                       required
@@ -1337,7 +1337,7 @@
                         type="number"
                         step="0.000001"
                         min="0.000001"
-                        error-text="Amount should be grater than 0.000001 Matic"
+                        error-text="Amount should be grater than 0.000001 MATIC"
                         animate
                         required
                       >
@@ -1367,7 +1367,7 @@
                         id="asset_selector"
                         onchange=${handleAssetChange}
                       >
-                        <sm-chip value="Matic" selected>Matic</sm-chip>
+                        <sm-chip value="Matic" selected>MATIC</sm-chip>
                         <sm-chip value="usdc">USDC</sm-chip>
                         <sm-chip value="usdt">USDT</sm-chip>
                       </sm-chips>
@@ -1382,7 +1382,7 @@
                     disabled
                     onclick="sendTx()"
                   >
-                    Send Matic
+                    Send MATIC
                   </button>
                 </div>
               </fieldset>
@@ -1393,7 +1393,7 @@
           window.ethereum &&
           !(window.currentChainId && window.currentChainId === "0x1")
         ) {
-          renderError("Please switch MetaMask to Matic Mainnet");
+          renderError("Please switch MetaMask to MATIC Mainnet");
         }
       });
       function togglePrivateKeyVisibility(input) {
@@ -1444,7 +1444,7 @@
                   </div>
                   <p>
                     Balance:
-                    <b class="amount-shown">${ethBalance} Matic</b>
+                    <b class="amount-shown">${ethBalance} MATIC</b>
                     ${selectedAsset !== "Matic"
                       ? html`|
                           <b class="amount-shown"
@@ -1656,7 +1656,7 @@
           getRef("page_container"),
           html`
             <div class="grid gap-1">
-              <h2>Don't have an Matic address? Create one</h2>
+              <h2>Don't have an MATIC address? Create one</h2>
               <section class="create-buttons">
                 <button
                   class="button button--primary interactive gap-0-5 margin-right-auto"
@@ -1682,7 +1682,7 @@
                       </g>
                     </g>
                   </svg>
-                  Generate Matic address
+                  Generate MATIC address
                 </button>
                 <button
                   class="button button--primary interactive gap-0-5 margin-right-auto"
@@ -1701,7 +1701,7 @@
                       d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-2-9c-4.97 0-9 4.03-9 9H0l4 4 4-4H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"
                     />
                   </svg>
-                  Retrieve Matic address
+                  Retrieve MATIC address
                 </button>
               </section>
             </div>
@@ -1722,7 +1722,7 @@
             <ul id="generated_addresses" class="grid gap-1-5">
               <li class="grid gap-0-5">
                 <div>
-                  <h5>Matic Address</h5>
+                  <h5>MATIC Address</h5>
                   <sm-copy value="${maticAddress}"></sm-copy>
                 </div>
                 <div>
