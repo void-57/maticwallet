@@ -751,7 +751,7 @@
           // setMetaMaskStatus(window.ethereum.isConnected())
           window.ethereum.on("chainChanged", (chainId) => {
             window.currentChainId = chainId;
-            if (chainId !== "0x1") {
+            if (chainId !== "0x89") {
               renderError("Please switch MetaMask to Matic Mainnet");
             } else {
               router.routeTo(location.hash);
@@ -763,7 +763,7 @@
             })
             .then((chainId) => {
               window.currentChainId = chainId;
-              if (chainId !== "0x38") {
+              if (chainId !== "0x89") {
                 renderError("Please switch MetaMask to Matic Wallet Mainnet");
               } else {
                 router.routeTo(location.hash);
@@ -907,7 +907,7 @@
         );
         if (
           window.ethereum &&
-          !(window.currentChainId && window.currentChainId === "0x1")
+          !(window.currentChainId && window.currentChainId === "0x89")
         ) {
           renderError("Please switch MetaMask to MATIC Mainnet");
         }
@@ -1394,7 +1394,7 @@
         );
         if (
           window.ethereum &&
-          !(window.currentChainId && window.currentChainId === "0x1")
+          !(window.currentChainId && window.currentChainId === "0x89")
         ) {
           renderError("Please switch MetaMask to MATIC Mainnet");
         }
