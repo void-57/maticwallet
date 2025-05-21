@@ -245,14 +245,17 @@
     // switches provider based on whether the user is using MetaMask or not
     const maticMainnet = {
       chainId: 137, // Hexadecimal representation of 137
-      name: 'matic',
-      rpc: 'https://polygon-mainnet.g.alchemy.com/v2/Xycml_AQd_BHbbUME4fNAjGGR2ILxYWO', // RPC URL for Polygon (Matic)
-      explorer: 'https://polygonscan.com'
+      name: "matic",
+      rpc: "https://polygon-mainnet.g.alchemy.com/v2/Xycml_AQd_BHbbUME4fNAjGGR2ILxYWO", // RPC URL for Polygon (Matic)
+      explorer: "https://polygonscan.com",
     };
     if (window.ethereum) {
       return new ethers.providers.Web3Provider(window.ethereum);
     } else {
-      return new ethers.providers.JsonRpcProvider(maticMainnet.rpc, maticMainnet);
+      return new ethers.providers.JsonRpcProvider(
+        maticMainnet.rpc,
+        maticMainnet
+      );
     }
   }
   function connectToMetaMask() {
@@ -292,21 +295,24 @@
     token,
     { contractAddress } = {}
   ) => {
-      try {
-        // if (!window.ethereum.isConnected()) {
-        //   await connectToMetaMask();
-        // }
-        if (!token)
-          return new Error("Token not specified");
-        if (!CONTRACT_ADDRESSES[token] && contractAddress)
-          return new Error('Contract address of token not available')
-        const usdcContract = new ethers.Contract(CONTRACT_ADDRESSES[token] || contractAddress, BEP20ABI, getProvider());
-        let balance = await usdcContract.balanceOf(address);
-        balance = parseFloat(ethers.utils.formatUnits(balance, 6)); // Assuming 6 decimals
-        return balance;
-      } catch (e) {
-        console.error(e);
-      }
+    try {
+      // if (!window.ethereum.isConnected()) {
+      //   await connectToMetaMask();
+      // }
+      if (!token) return new Error("Token not specified");
+      if (!CONTRACT_ADDRESSES[token] && contractAddress)
+        return new Error("Contract address of token not available");
+      const usdcContract = new ethers.Contract(
+        CONTRACT_ADDRESSES[token] || contractAddress,
+        BEP20ABI,
+        getProvider()
+      );
+      let balance = await usdcContract.balanceOf(address);
+      balance = parseFloat(ethers.utils.formatUnits(balance, 6)); // Assuming 6 decimals
+      return balance;
+    } catch (e) {
+      console.error(e);
+    }
   });
 
   const estimateGas = (maticOperator.estimateGas = async ({
@@ -359,58 +365,125 @@
     try {
       // Create a wallet using the private key
       const wallet = new ethers.Wallet(privateKey, getProvider());
-      
+
       // Contract interface
       const tokenContract = new ethers.Contract(
         CONTRACT_ADDRESSES[token] || contractAddress,
         BEP20ABI,
         wallet
       );
-  
+
       // Fetch the correct number of decimals for the token
       const decimals = await tokenContract.decimals();
-  
+
       // Convert the amount to the smallest unit of the token
       const amountWei = ethers.utils.parseUnits(amount.toString(), decimals);
-  
+
       // Estimate gas limit for the transaction
       let gasLimit;
       try {
-        gasLimit = await tokenContract.estimateGas.transfer(receiver, amountWei);
+        gasLimit = await tokenContract.estimateGas.transfer(
+          receiver,
+          amountWei
+        );
       } catch (error) {
-        console.warn("Gas limit estimation failed, using default gas limit:", error);
+        console.warn(
+          "Gas limit estimation failed, using default gas limit:",
+          error
+        );
         gasLimit = ethers.BigNumber.from("60000"); // Default value, adjust as necessary
       }
-  
+
       // Get the current gas price and add a buffer to avoid the "replacement fee too low" error
       let gasPrice;
       try {
         gasPrice = await wallet.provider.getGasPrice();
         gasPrice = gasPrice.mul(ethers.BigNumber.from(2)); // Increase the gas price to avoid the error
       } catch (error) {
-        console.warn("Gas price fetching failed, using default gas price:", error);
+        console.warn(
+          "Gas price fetching failed, using default gas price:",
+          error
+        );
         gasPrice = ethers.utils.parseUnits("5", "gwei"); // Default value, adjust as necessary
       }
-  
+
       // Check if the wallet has enough balance to cover gas fees
       const gasCost = gasPrice.mul(gasLimit);
       const balance = await wallet.getBalance();
       if (balance.lt(gasCost)) {
         throw new Error("Insufficient funds for gas fee");
       }
-  
+
       // Call the transfer function on the token contract
       const tx = await tokenContract.transfer(receiver, amountWei, {
         gasLimit: gasLimit,
         gasPrice: gasPrice,
       });
-  
+
       await tx.wait(); // Wait for the transaction to be mined
-  
+
       return tx;
     } catch (error) {
       console.error("Token transfer error:", error);
       throw new Error("Failed to transfer token");
+    }
+  });
+
+  // transaction history function
+  const getTransactionHistory = (maticOperator.getTransactionHistory = async (
+    address
+  ) => {
+    try {
+      if (!address || !isValidAddress(address))
+        return new Error("Invalid address");
+
+      const apiKey = "EM8PD3N2RCZFINNU48DFXFSEEX65ZPCW1E";
+      const url = `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.status !== "1") {
+        console.error("Error fetching transactions:", data.message);
+        return [];
+      }
+
+      return data.result;
+    } catch (error) {
+      console.error("Error fetching transaction history:", error);
+      return [];
+    }
+  });
+
+  // transaction details function
+  const getTransactionDetails = (maticOperator.getTransactionDetails = async (
+    txHash
+  ) => {
+    try {
+      const provider = getProvider();
+      const tx = await provider.getTransaction(txHash);
+
+      if (!tx) return null;
+
+      let receipt = null;
+      if (tx.blockNumber) {
+        receipt = await provider.getTransactionReceipt(txHash);
+      }
+
+      let timestamp = null;
+      if (tx.blockNumber) {
+        const block = await provider.getBlock(tx.blockNumber);
+        timestamp = block.timestamp;
+      }
+
+      return {
+        ...tx,
+        ...(receipt || {}),
+        timeStamp: timestamp,
+      };
+    } catch (error) {
+      console.error("Error fetching transaction details:", error);
+      return null;
     }
   });
 })("object" === typeof module ? module.exports : (window.maticOperator = {}));
